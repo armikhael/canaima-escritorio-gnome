@@ -8,4 +8,8 @@ GRANDES MODIFICACIONES
 
 PEQUEÑAS MODIFICACIONES
 
-* 
+* Now running lintian...
+W: canaima-escritorio-gnome source: non-native-package-with-native-version
+E: canaima-escritorio-gnome: copyright-should-refer-to-common-license-file-for-gpl
+W: canaima-escritorio-gnome: debian-changelog-line-too-long line 1
+

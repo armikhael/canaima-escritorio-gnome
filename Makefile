@@ -2,22 +2,34 @@
 
 SHELL := sh -e
 
+SCRIPTS = "debian/preinst install" "debian/postinst configure" "debian/prerm remove" "debian/postrm remove"
+
 all: test build
 
 test:
-	@echo "Nada para comprobar!"
+
+	@echo -n "\n===== Comprobando posibles errores de sintaxis en los scripts de mantenedor =====\n\n"
+
+	@for SCRIPT in $(SCRIPTS); \
+	do \
+		echo -n "$${SCRIPT}\n"; \
+		bash -n $${SCRIPT}; \
+	done
+
+	@echo -n "\n=================================================================================\nHECHO!\n\n"
 
 build:
+
 	@echo "Nada para compilar!"
 
 install:
 
-	mkdir -p $(DESTDIR)/usr/share/icons/canaima-estilo-visual/
-	cp -r pascua.jpg $(DESTDIR)/usr/share/icons/canaima-estilo-visual/
+	mkdir -p $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	cp -r pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 
 uninstall:
 
-	rm -rf $(DESTDIR)/usr/share/icons/canaima-estilo-visual/pascua.png
+	rm -rf $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 
 clean:
 
