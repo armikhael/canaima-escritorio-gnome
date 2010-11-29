@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+2) unstable; urgency=low
+
+  * [bca7ca0] Corrigiendo dependencia del gdm3
+
+ -- Luis Alejandro Martez Faneyth <martinez.faneyth@gmail.com>  Mon, 29 Nov 2010 11:24:08 -0430
+
 canaima-escritorio-gnome (3.0+1) unstable; urgency=low
 
   * [a37a855] Modificando scripts del mantenedor
