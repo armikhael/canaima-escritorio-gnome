@@ -19,11 +19,6 @@ case ${1} in
 
 	install|upgrade)
 
-		echo 'LANG="es_VE.UTF-8"\nLANGUAGE="es_VE:es"' > /etc/default/locale
-		echo 'es_VE.UTF-8 UTF-8' > /etc/locale.gen
-
-		locale-gen
-
 	;;
 
 	abort-upgrade)
