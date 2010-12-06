@@ -18,6 +18,8 @@
 PKG="canaima-escritorio-gnome"
 LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator"
 
+is_laptop=$( laptop-detect )
+
 case ${1} in
 
 	configure)
@@ -29,9 +31,19 @@ case ${1} in
 		if [ -e /etc/init.d/${list} ]
 		then
 
-		if [ ${list} != "acpid" ] ||
- 
+		if [ $is_laptop == 0 ]
+		then
+
+		if [ ${list} != "acpid" ] || [ ${list} != "apmd" ]
+		then
 			update-rc.d -f ${list} remove
+		fi
+
+		else
+
+			update-rc.d -f ${list} remove
+
+		fi
 
 		fi
 
