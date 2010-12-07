@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+6) unstable; urgency=low
+
+  * [d42595d] Quitando dependencia de canaima-base
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Tue, 07 Dec 2010 15:50:46 -0430
+
 canaima-escritorio-gnome (3.0+5) unstable; urgency=low
 
   * [b469843] Optimizando Canaima
