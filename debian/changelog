@@ -1,8 +1,10 @@
 canaima-escritorio-gnome (3.0+5) unstable; urgency=low
 
   * [b469843] Optimizando Canaima
+  * [c91279d] Agregando detección de laptop
+  * [e944249] Removiendo basura
 
- -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Mon, 06 Dec 2010 16:38:28 -0430
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Tue, 07 Dec 2010 13:47:17 -0430
 
 canaima-escritorio-gnome (3.0+4) unstable; urgency=low
 
