@@ -24,55 +24,83 @@ case ${1} in
 
 	configure)
 
-		# Removiendo scripts innecesarios
+		echo "===== Removiendo scripts de inicio usualmente innecesarios ====="
+
 		for list in LIST
 		do
 
 		if [ -e /etc/init.d/${list} ]
 		then
 
-		if [ $is_laptop == 0 ]
-		then
+			if [ $is_laptop == 0 ]
+			then
 
-		if [ ${list} != "acpid" ] || [ ${list} != "apmd" ]
-		then
-			update-rc.d -f ${list} remove
-		fi
+				if [ ${list} != "acpid" ] || [ ${list} != "apmd" ]
+				then
 
-		else
+					echo "Removiendo demonio ${list} ..."
+					update-rc.d -f ${list} remove
 
-			update-rc.d -f ${list} remove
+				fi
 
-		fi
+			else
+
+				echo "Removiendo demonio ${list} ..."
+				update-rc.d -f ${list} remove
+
+			fi
 
 		fi
 
 		done
 
-		sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/defaults/avahi-daemon
+		if [ -e /etc/defaults/avahi-daemon ]
+		then
 
-		# Agregando forma de carga de las dependencias iniciales del sistema
-		# CONCURRENCY=makefile carga solamente las dependencias en el orden necesitado
+			echo "===== Asegurando que avahi-daemon no inicie ====="
+			sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/defaults/avahi-daemon
 
-		echo 'CONCURRENCY=makefile' >> /etc/default/rcS
+		fi
 
-		# Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida
-		echo 'vm.swappiness=10' >> /etc/sysctl.conf
+		if [ -e /etc/default/rcS ]
+		then
 
-		# Pre-enlazando librerías para mejorar la eficiencia de Canaima
-		echo "Pre-enlazando librerías para mejorar la eficiencia de Canaima"
-		sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/defaults/prelink
-		sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/defaults/prelink
-		/etc/cron.daily/prelink
+			echo "===== Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile) ====="
+			echo 'CONCURRENCY=makefile' >> /etc/default/rcS
 
-		# Reduciendo cantidad de TTY'S, el usuario no las usa todas en realidad
-		sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
-		sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
-		sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
-		sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
+		fi
 
+		if [ -e /etc/sysctl.conf ]
+		then
 
-		# Añadiendo "noatime" a /etc/fstab
+			echo "===== Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness) ====="
+			echo 'vm.swappiness=10' >> /etc/sysctl.conf
+
+		fi
+
+		if [ -e /etc/defaults/prelink ]
+		then
+
+			echo "===== Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink) ====="
+			sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/defaults/prelink
+			sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/defaults/prelink
+			/etc/cron.daily/prelink
+
+		fi
+
+		if [ -e /etc/inittab ]
+		then
+
+			echo "===== Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad ====="
+			sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
+			sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
+			sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
+			sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
+
+		fi
+
+		echo "===== Añadiendo noatime a /etc/fstab ====="
+
 		FSTAB=/etc/fstab
 
 		echo " " >> ${FSTAB}
