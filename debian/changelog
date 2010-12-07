@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+7) unstable; urgency=low
+
+  * [1e3febb] Corrigiendo script de post instalación
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Tue, 07 Dec 2010 16:47:14 -0430
+
 canaima-escritorio-gnome (3.0+6) unstable; urgency=low
 
   * [d42595d] Quitando dependencia de canaima-base
