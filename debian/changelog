@@ -1,8 +1,9 @@
 canaima-escritorio-gnome (3.0+8) unstable; urgency=low
 
   * [3cc5387] Corrigiendo procedimiento de laptop-detect
+  * [aa4a82a] Corrigiendo error de sintaxis en debian/postinst
 
- -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 08 Dec 2010 14:07:41 -0430
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 08 Dec 2010 15:00:19 -0430
 
 canaima-escritorio-gnome (3.0+7) unstable; urgency=low
 
