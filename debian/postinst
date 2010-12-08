@@ -19,6 +19,7 @@ PKG="canaima-escritorio-gnome"
 LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator"
 
 if [ -e /usr/sbin/laptop-detect ]
+then
 
 	laptop-detect
 	is_laptop=$?
