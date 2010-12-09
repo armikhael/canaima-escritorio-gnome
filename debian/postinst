@@ -17,8 +17,9 @@
 
 PKG="canaima-escritorio-gnome"
 LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator"
-
+FSTAB=/etc/fstab
 LAPTOP=""
+
 if [ -n "$(which laptop-detect)" ]; then
 	if laptop-detect >/dev/null; then
 		LAPTOP=true
@@ -31,13 +32,10 @@ case ${1} in
 
 		echo "===== Removiendo scripts de inicio usualmente innecesarios ====="
 
-		for list in LIST
+		for list in ${LIST}
 		do
 
-		if [ -e /etc/init.d/${list} ]
-		then
-
-			if [ $LAPTOP == true ]
+			if [ -n $LAPTOP ]
 			then
 
 				if [ ${list} != "acpid" ] || [ ${list} != "apmd" ]
@@ -55,15 +53,13 @@ case ${1} in
 
 			fi
 
-		fi
-
 		done
 
-		if [ -e /etc/defaults/avahi-daemon ]
+		if [ -e /etc/default/avahi-daemon ]
 		then
 
 			echo "===== Asegurando que avahi-daemon no inicie ====="
-			sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/defaults/avahi-daemon
+			sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/default/avahi-daemon
 
 		fi
 
@@ -83,12 +79,12 @@ case ${1} in
 
 		fi
 
-		if [ -e /etc/defaults/prelink ]
+		if [ -e /etc/default/prelink ]
 		then
 
 			echo "===== Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink) ====="
-			sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/defaults/prelink
-			sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/defaults/prelink
+			sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/default/prelink
+			sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/default/prelink
 			/etc/cron.daily/prelink
 
 		fi
@@ -106,13 +102,16 @@ case ${1} in
 
 		echo "===== Añadiendo noatime a /etc/fstab ====="
 
-		FSTAB=/etc/fstab
+		if [ $( cat ${FSTAB} | grep "Optimizado para Canaima GNU/Linux" | wc -l ) == 0 ]
+		then
 
-		echo " " >> ${FSTAB}
-		echo " " >> ${FSTAB}
-		echo "#" >> ${FSTAB}
-		echo "# Optimizado para Canaima GNU/Linux (agregado noatime a las opciones de disco)" >> ${FSTAB}
-		echo "#" >> ${FSTAB}
+			echo " " >> ${FSTAB}
+			echo " " >> ${FSTAB}
+			echo "#" >> ${FSTAB}
+			echo "# Optimizado para Canaima GNU/Linux (agregado noatime a las opciones de disco)" >> ${FSTAB}
+			echo "#" >> ${FSTAB}
+
+		fi
 
 		sed -i 's/   / /g' ${FSTAB}
 		sed -i 's/   / /g' ${FSTAB}
