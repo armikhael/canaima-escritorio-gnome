@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+10) unstable; urgency=low
+
+  * [2e42988] Corrigiendo errores en la desactivación de servicios
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Thu, 09 Dec 2010 16:48:04 -0430
+
 canaima-escritorio-gnome (3.0+9) unstable; urgency=low
 
   * [d831b7c] Corrigiendo error en el procedimiento para detectar si
