@@ -7,7 +7,7 @@
 # COPYRIGHT:
 #  (C) 2010 Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>
 #  (C) 2010 Diego Alberto Aguilera Zambrano <daguilera85@gmail.com>
-	#  (C) 2010 Carlos Alejandro Guerrero Mora <guerrerocarlos@gmail.com>
+#  (C) 2010 Carlos Alejandro Guerrero Mora <guerrerocarlos@gmail.com>
 #  (C) 2010 Francisco Javier Vásquez Guerrero <franjvasquezg@gmail.com>
 # LICENCIA: GPL3
 # ==============================================================================
@@ -18,12 +18,11 @@
 PKG="canaima-escritorio-gnome"
 LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator"
 
-if [ -e /usr/sbin/laptop-detect ]
-then
-
-	laptop-detect
-	is_laptop=$?
-
+LAPTOP=""
+if [ -n "$(which laptop-detect)" ]; then
+	if laptop-detect >/dev/null; then
+		LAPTOP=true
+	fi
 fi
 
 case ${1} in
@@ -38,7 +37,7 @@ case ${1} in
 		if [ -e /etc/init.d/${list} ]
 		then
 
-			if [ $is_laptop == 0 ]
+			if [ $LAPTOP == true ]
 			then
 
 				if [ ${list} != "acpid" ] || [ ${list} != "apmd" ]
