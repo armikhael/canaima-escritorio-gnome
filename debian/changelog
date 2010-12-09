@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.0+9) unstable; urgency=low
+
+  * [d831b7c] Corrigiendo error en el procedimiento para detectar si
+    estamos en una laptop
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Thu, 09 Dec 2010 13:54:35 -0430
+
 canaima-escritorio-gnome (3.0+8) unstable; urgency=low
 
   * [3cc5387] Corrigiendo procedimiento de laptop-detect
