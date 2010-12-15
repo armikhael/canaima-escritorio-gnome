@@ -83,6 +83,8 @@ case ${1} in
 		then
 
 			echo "===== Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink) ====="
+			echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados ..."
+			echo "Le recomendamos que se tome un buen café venezolano mientras espera."
 			sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/default/prelink
 			sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/default/prelink
 			/etc/cron.daily/prelink
