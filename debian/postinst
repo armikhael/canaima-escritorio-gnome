@@ -19,6 +19,80 @@ PKG="canaima-escritorio-gnome"
 LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator"
 FSTAB=/etc/fstab
 LAPTOP=""
+YELLOW="\033[1;33m"
+RED="\033[0;31m"
+ENDCOLOR="\033[0m"
+
+function PARCHEAR ()
+{
+
+# =======================================================================
+# FUNCIÓN PARCHEAR
+#
+# Aplica las mejoras del script de Lennart Poettering
+#
+# =======================================================================
+
+echo -e $YELLOW"===== Parcheando Canaima GNU/Linux con el script de Lennart Poettering ====="$ENDCOLOR
+
+FICHERO="$HOME/.bashrc"
+
+LINEAS=$( cat $FICHERO | grep "/dev/cgroup/cpu/user" | wc -l )
+
+if [ "$LINEAS" == "0" ];
+then
+	echo "Parcheando $FICHERO ..."
+	echo "if [ \"\$PS1\" ] ; then" | tee -a $FICHERO
+	echo "mkdir -p -m 0700 /dev/cgroup/cpu/user/\$\$ > /dev/null 2>&1" | tee -a $FICHERO
+	echo "echo \$\$ > /dev/cgroup/cpu/user/\$\$/tasks" | tee -a $FICHERO
+	echo "echo \"1\" > /dev/cgroup/cpu/user/\$\$/notify_on_release" | tee -a $FICHERO
+	echo "fi" | tee -a $FICHERO
+else
+	echo "Parece que ya aplicaste el patch a $FICHERO con anterioridad... Cancelando."
+fi
+
+FICHERO="/etc/rc.local"
+
+LINEAS=$( cat $FICHERO | grep "/dev/cgroup/cpu/release_agent" | wc -l )
+
+if [ "$LINEAS" == "0" ];
+then
+	echo "Parcheando ${FICHERO} ..."
+
+	POSI=$( cat $FICHERO | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
+
+	echo "Respaldando $FICHERO en /etc/rc.local.backup"
+	cp /etc/rc.local /etc/rc.local.backup
+	sed "${POSI}imkdir -p /dev/cgroup/cpu\nmount -t cgroup cgroup /dev/cgroup/cpu -o cpu\nmkdir -m 0777 /dev/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /dev/cgroup/cpu/release_agent" /etc/rc.local | tee /etc/rc.new.local
+	mv /etc/rc.new.local /etc/rc.local
+
+else
+	echo "Parece que ya aplicaste el patch a $FICHERO con anterioridad... Cancelando."
+fi
+
+echo -e $YELLOW"===== Otorgando permisos de ejecución a ${FICHERO} ====="$ENDCOLOR
+sudo chmod +x $FICHERO
+
+FICHERO="/usr/local/sbin/cgroup_clean"
+
+echo -e $YELLOW"===== Creando ${FICHERO} ====="$ENDCOLOR
+
+if [ ! -e $FICHERO ];
+then
+	echo "#!/bin/sh" | tee $FICHERO
+	echo "if [ \"\$*\" != \"/user\" ]; then" | tee -a $FICHERO
+	echo "rmdir /dev/cgroup/cpu/\$*" | tee -a $FICHERO
+	echo "fi" | tee -a $FICHERO
+
+else
+	echo "El archivo $FICHERO ya existe."
+fi;
+
+echo -e $YELLOW"===== Otorgando permisos de ejecución a ${FICHERO} ====="$ENDCOLOR
+
+sudo chmod +x $FICHERO
+
+}
 
 if [ -n "$(which laptop-detect)" ]; then
 	if laptop-detect >/dev/null; then
@@ -29,6 +103,8 @@ fi
 case ${1} in
 
 	configure)
+
+		PARCHEAR
 
 		echo "===== Removiendo scripts de inicio usualmente innecesarios ====="
 
