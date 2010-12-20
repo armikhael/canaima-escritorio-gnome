@@ -16,7 +16,7 @@
 # términos de la Licencia Pública General de GNU (versión 3).
 
 PKG="canaima-escritorio-gnome"
-LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator"
+LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator nfs-common statd"
 FSTAB=/etc/fstab
 LAPTOP=""
 YELLOW="\033[1;33m"
@@ -119,13 +119,14 @@ case ${1} in
 
 					echo "Removiendo demonio ${list} ..."
 					update-rc.d -f ${list} remove
-
+					[ -e /etc/init.d/${list} ] && rm -rf /etc/init.d/${list}
 				fi
 
 			else
 
 				echo "Removiendo demonio ${list} ..."
 				update-rc.d -f ${list} remove
+				[ -e /etc/init.d/${list} ] && rm -rf /etc/init.d/${list}
 
 			fi
 
@@ -183,8 +184,6 @@ case ${1} in
 		if [ $( cat ${FSTAB} | grep "Optimizado para Canaima GNU/Linux" | wc -l ) == 0 ]
 		then
 
-			echo " " >> ${FSTAB}
-			echo " " >> ${FSTAB}
 			echo "#" >> ${FSTAB}
 			echo "# Optimizado para Canaima GNU/Linux (agregado noatime a las opciones de disco)" >> ${FSTAB}
 			echo "#" >> ${FSTAB}
