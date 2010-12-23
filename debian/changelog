@@ -1,8 +1,10 @@
 canaima-escritorio-gnome (3.0+11) unstable; urgency=low
 
   * [e6232d3] Corrigiendo detalles
+  * [f8a4df2] Agregando parche de Lennart Poettering
+  * [7a9f1ad] Modificando script que reduce los demonios al inicio
 
- -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 15 Dec 2010 05:03:14 -0430
+ -- Luis Alejandro Martínez Faneyth <huntingbears@OKComputer.cnti.gob.ve>  Thu, 23 Dec 2010 09:37:53 -0430
 
 canaima-escritorio-gnome (3.0+10) unstable; urgency=low
 
