@@ -11,7 +11,7 @@ Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome/tre
 
 Package: canaima-escritorio-gnome
 Architecture: all
-Depends: canaima-web, canaima-multimedia, canaima-ofimatica, laptop-detect, xdg-user-dirs, readahead, preload, prelink, locales, base-files (>=5.10+1canaima4), gdm3, canaima-chat (>=3.0), canaima-bienvenido (>=3.0), canaima-acerca (>=3.0), canaima-estilo-visual (>=3.0), canaima-llaves (>=3.0), canaima-notas, amigu (>=0.6.3+4canaima4), ${shlibs:Depends}, ${misc:Depends}
+Depends: gnome-core, canaima-web, canaima-multimedia, canaima-ofimatica, laptop-detect, xdg-user-dirs, readahead, preload, prelink, locales, base-files (>=5.10+1canaima4), gdm3, canaima-chat (>=3.0), canaima-bienvenido (>=3.0), canaima-acerca (>=3.0), canaima-estilo-visual (>=3.0), canaima-llaves (>=3.0), canaima-notas, amigu (>=0.6.3+4canaima4), ${shlibs:Depends}, ${misc:Depends}
 Conflicts: gdm
 Description: Archivos base de Canaima GNU/Linux
  Este paquete provee los archivos base de Canaima GNU/Linux.
