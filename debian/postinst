@@ -57,7 +57,7 @@ case ${1} in
 		then
 
 			echo "Respaldando ${BASHRC_F} en ${BASHRC_F}.respaldo"
-			cp ${BASHRC_F} "${BASHRC_F}.respaldo"
+			[ ! -e ${BASHRC_F}.respaldo ] && cp ${BASHRC_F} ${BASHRC_F}.respaldo
 
 			echo "Parcheando ${BASHRC_F}"
 
@@ -89,7 +89,7 @@ case ${1} in
 		INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
 
 		echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
-		cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
+		[ ! -e ${RCLOCAL_F}.respaldo ] && cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
 
 		echo "Parcheando ${RCLOCAL_F}"
 
