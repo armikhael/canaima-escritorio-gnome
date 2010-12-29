@@ -19,80 +19,9 @@ PKG="canaima-escritorio-gnome"
 LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs lvm2 ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator nfs-common statd"
 FSTAB=/etc/fstab
 LAPTOP=""
-YELLOW="\033[1;33m"
-RED="\033[0;31m"
-ENDCOLOR="\033[0m"
-
-function PARCHEAR ()
-{
-
-# =======================================================================
-# FUNCIÓN PARCHEAR
-#
-# Aplica las mejoras del script de Lennart Poettering
-#
-# =======================================================================
-
-echo -e $YELLOW"===== Parcheando Canaima GNU/Linux con el script de Lennart Poettering ====="$ENDCOLOR
-
-FICHERO="$HOME/.bashrc"
-
-LINEAS=$( cat $FICHERO | grep "/dev/cgroup/cpu/user" | wc -l )
-
-if [ "$LINEAS" == "0" ];
-then
-	echo "Parcheando $FICHERO ..."
-	echo "if [ \"\$PS1\" ] ; then" | tee -a $FICHERO
-	echo "mkdir -p -m 0700 /dev/cgroup/cpu/user/\$\$ > /dev/null 2>&1" | tee -a $FICHERO
-	echo "echo \$\$ > /dev/cgroup/cpu/user/\$\$/tasks" | tee -a $FICHERO
-	echo "echo \"1\" > /dev/cgroup/cpu/user/\$\$/notify_on_release" | tee -a $FICHERO
-	echo "fi" | tee -a $FICHERO
-else
-	echo "Parece que ya aplicaste el patch a $FICHERO con anterioridad... Cancelando."
-fi
-
-FICHERO="/etc/rc.local"
-
-LINEAS=$( cat $FICHERO | grep "/dev/cgroup/cpu/release_agent" | wc -l )
-
-if [ "$LINEAS" == "0" ];
-then
-	echo "Parcheando ${FICHERO} ..."
-
-	POSI=$( cat $FICHERO | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
-
-	echo "Respaldando $FICHERO en /etc/rc.local.backup"
-	cp /etc/rc.local /etc/rc.local.backup
-	sed "${POSI}imkdir -p /dev/cgroup/cpu\nmount -t cgroup cgroup /dev/cgroup/cpu -o cpu\nmkdir -m 0777 /dev/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /dev/cgroup/cpu/release_agent" /etc/rc.local | tee /etc/rc.new.local
-	mv /etc/rc.new.local /etc/rc.local
-
-else
-	echo "Parece que ya aplicaste el patch a $FICHERO con anterioridad... Cancelando."
-fi
-
-echo -e $YELLOW"===== Otorgando permisos de ejecución a ${FICHERO} ====="$ENDCOLOR
-sudo chmod +x $FICHERO
-
-FICHERO="/usr/local/sbin/cgroup_clean"
-
-echo -e $YELLOW"===== Creando ${FICHERO} ====="$ENDCOLOR
-
-if [ ! -e $FICHERO ];
-then
-	echo "#!/bin/sh" | tee $FICHERO
-	echo "if [ \"\$*\" != \"/user\" ]; then" | tee -a $FICHERO
-	echo "rmdir /dev/cgroup/cpu/\$*" | tee -a $FICHERO
-	echo "fi" | tee -a $FICHERO
-
-else
-	echo "El archivo $FICHERO ya existe."
-fi;
-
-echo -e $YELLOW"===== Otorgando permisos de ejecución a ${FICHERO} ====="$ENDCOLOR
-
-sudo chmod +x $FICHERO
-
-}
+VERDE="\033[1;34m"
+ROJO="\033[0;31m"
+FIN="\033[0m"
 
 if [ -n "$(which laptop-detect)" ]; then
 	if laptop-detect >/dev/null; then
@@ -104,9 +33,92 @@ case ${1} in
 
 	configure)
 
-		PARCHEAR
+	echo -e ${VERDE}"===== Parcheando Canaima GNU/Linux con el script de Lennart Poettering ====="${FIN}
 
-		echo "===== Removiendo scripts de inicio usualmente innecesarios ====="
+	# Para cada usuario en /home/ ...
+	for usuario in /home/*? ;
+	do
+
+		# Obteniendo sólo el nombre del usuario
+		usuario_min=$(basename ${usuario})
+
+		# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+		case $(grep ${usuario_min} /etc/shadow) in
+
+		'')
+		# No hace nada si no se encuentra en /etc/shadow
+		;;
+
+		*)
+
+		BASHRC_F="/home/${usuario_min}/.bashrc"
+
+		if [ $( cat ${BASHRC_F} | grep "/dev/cgroup/cpu/user" | wc -l ) == "0" ];
+		then
+
+			echo "Respaldando ${BASHRC_F} en ${BASHRC_F}.respaldo"
+			cp ${BASHRC_F} "${BASHRC_F}.respaldo"
+
+			echo "Parcheando ${BASHRC_F}"
+
+			echo "if [ \"\$PS1\" ] ; then" >> ${BASHRC_F}
+			echo "mkdir -p -m 0700 /dev/cgroup/cpu/user/\$\$ > /dev/null 2>&1" >> ${BASHRC_F}
+			echo "echo \$\$ > /dev/cgroup/cpu/user/\$\$/tasks" >> ${BASHRC_F}
+			echo "echo \"1\" > /dev/cgroup/cpu/user/\$\$/notify_on_release" >> ${BASHRC_F}
+			echo "fi" >> ${BASHRC_F}
+
+			chown ${usuario_min}:${usuario_min} ${BASHRC_F}
+
+		else
+
+			echo ${ROJO}"Parece que ya aplicaste el patch a ${BASHRC_F} con anterioridad. Ignorando."${FIN}
+
+		fi
+
+		;;
+
+		esac
+
+	done
+
+	RCLOCAL_F="/etc/rc.local"
+
+	if [ $( cat ${RCLOCAL_F} | grep "/dev/cgroup/cpu/release_agent" | wc -l ) == "0" ];
+	then
+
+		INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
+
+		echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
+		cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
+
+		echo "Parcheando ${RCLOCAL_F}"
+
+		sed "${INSERTAR}imkdir -p /dev/cgroup/cpu\nmount -t cgroup cgroup /dev/cgroup/cpu -o cpu\nmkdir -m 0777 /dev/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /dev/cgroup/cpu/release_agent" /etc/rc.local >> "${RCLOCAL_F}.nuevo"
+		mv ${RCLOCAL_F}.nuevo ${RCLOCAL_F}
+
+	else
+
+		echo ${ROJO}"Parece que ya aplicaste el patch a $FICHERO con anterioridad. Ignorando."${FIN}
+
+	fi
+
+	echo -e "Otorgando permisos de ejecución a ${BASHRC_F}"
+	chmod +x ${BASHRC_F}
+
+	CGROUP_F="/usr/local/sbin/cgroup_clean"
+
+	echo -e "Creando ${CGROUP_F}"
+
+	echo "#!/bin/sh" > ${CGROUP_F}
+	echo "if [ \"\$*\" != \"/user\" ]; then" >> ${CGROUP_F}
+	echo "rmdir /dev/cgroup/cpu/\$*" >> ${CGROUP_F}
+	echo "fi" >> ${CGROUP_F}
+
+	echo -e "Otorgando permisos de ejecución a ${CGROUP_F}"
+	chmod +x ${CGROUP_F}
+
+
+		echo ${VERDE}"===== Removiendo scripts de inicio usualmente innecesarios ====="${FIN}
 
 		for list in ${LIST}
 		do
@@ -117,14 +129,12 @@ case ${1} in
 				if [ ${list} != "acpid" ] || [ ${list} != "apmd" ]
 				then
 
-					echo "Removiendo demonio ${list} ..."
 					update-rc.d -f ${list} remove
 					[ -e /etc/init.d/${list} ] && rm -rf /etc/init.d/${list}
 				fi
 
 			else
 
-				echo "Removiendo demonio ${list} ..."
 				update-rc.d -f ${list} remove
 				[ -e /etc/init.d/${list} ] && rm -rf /etc/init.d/${list}
 
@@ -135,7 +145,7 @@ case ${1} in
 		if [ -e /etc/default/avahi-daemon ]
 		then
 
-			echo "===== Asegurando que avahi-daemon no inicie ====="
+			echo ${VERDE}"===== Asegurando que avahi-daemon no inicie ====="${FIN}
 			sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/default/avahi-daemon
 
 		fi
@@ -143,23 +153,23 @@ case ${1} in
 		if [ -e /etc/default/rcS ]
 		then
 
-			echo "===== Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile) ====="
-			echo 'CONCURRENCY=makefile' >> /etc/default/rcS
+			echo ${VERDE}"===== Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile) ====="${FIN}
+			[ -z $( grep "CONCURRENCY=makefile" /etc/default/rcS ) ] && echo 'CONCURRENCY=makefile' >> /etc/default/rcS
 
 		fi
 
 		if [ -e /etc/sysctl.conf ]
 		then
 
-			echo "===== Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness) ====="
-			echo 'vm.swappiness=10' >> /etc/sysctl.conf
+			echo ${VERDE}"===== Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness) ====="${FIN}
+			[ -z $( grep "vm.swappiness=10" /etc/sysctl.conf ) ] && echo 'vm.swappiness=10' >> /etc/sysctl.conf
 
 		fi
 
 		if [ -e /etc/default/prelink ]
 		then
 
-			echo "===== Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink) ====="
+			echo ${VERDE}"===== Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink) ====="${FIN}
 			echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados ..."
 			echo "Le recomendamos que se tome un buen café venezolano mientras espera."
 			sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/default/prelink
@@ -171,7 +181,7 @@ case ${1} in
 		if [ -e /etc/inittab ]
 		then
 
-			echo "===== Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad ====="
+			echo ${VERDE}"===== Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad ====="${FIN}
 			sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
 			sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
 			sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
@@ -179,7 +189,7 @@ case ${1} in
 
 		fi
 
-		echo "===== Añadiendo noatime a /etc/fstab ====="
+		echo ${VERDE}"===== Añadiendo noatime a /etc/fstab ====="${FIN}
 
 		if [ $( cat ${FSTAB} | grep "Optimizado para Canaima GNU/Linux" | wc -l ) == 0 ]
 		then
@@ -201,7 +211,7 @@ case ${1} in
 		for datos in $( cat ${FSTAB} | awk '{print $3"##--TOKEN--##"$2"##--TOKEN--##"$4"##--TOKEN--##"$1}' )
 		do
 
-		for fs in ext2 ext3 ext4
+		for fs in ext2 ext3 ext4 xfs
 		do
 
 		if [ $( echo $( expr "$datos" : "$fs" ) ) == 4 ]
