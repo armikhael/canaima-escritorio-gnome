@@ -22,6 +22,44 @@ PKG="canaima-escritorio-gnome"
 case ${1} in
 
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+
+echo -e ${VERDE}"===== Revirtiendo script de Lennart Poettering ====="${FIN}
+
+        # Para cada usuario en /home/ ...
+        for usuario in /home/*? ;
+        do
+
+                # Obtenemos sólo el nombre del usuario
+                usuario_min=$(basename ${usuario})
+
+                # Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+                case $(grep ${usuario_min} /etc/shadow) in
+
+                '')
+                # No hace nada si no se encuentra en /etc/shadow
+                ;;
+
+                *)
+
+                BASHRC_F="/home/${usuario_min}/.bashrc"
+
+# Si existe un archivo de respaldo, lo restauramos
+[ -e ${BASHRC_F}.respaldo ] && mv ${BASHRC_F}.respaldo ${BASHRC_F}
+;;
+
+esac
+done
+
+RCLOCAL_F="/etc/rc.local"
+
+# Si existe un archivo de respaldo, lo restauramos
+[ -e ${RCLOCAL_F}.respaldo ] && mv ${RCLOCAL_F}.respaldo ${RCLOCAL_F}
+
+CGROUP_F="/usr/local/sbin/cgroup_clean"
+
+# Si existe el archivo /usr/local/sbin/cgroup_clean, lo borramos
+[ -e ${CGROUP_F} ] && rm -rf ${CGROUP_F}
+
 	;;
 
 	*)
