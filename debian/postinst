@@ -171,77 +171,58 @@ case ${1} in
 	done
 
 	if [ -e /etc/default/avahi-daemon ]; then
-		ADVERTENCIA "===== Asegurando que avahi-daemon no inicie"
-			sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/default/avahi-daemon
+		ADVERTENCIA "Asegurando que avahi-daemon no inicie"
+		sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/default/avahi-daemon
+	fi
 
-		fi
+	if [ -e /etc/default/rcS ]; then
+		ADVERTENCIA "Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile)"
+		[ -z $( grep "CONCURRENCY=makefile" /etc/default/rcS ) ] && echo 'CONCURRENCY=makefile' >> /etc/default/rcS
+	fi
 
-		if [ -e /etc/default/rcS ]
-		then
+	if [ -e /etc/sysctl.conf ]; then
+		ADVERTENCIA "Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness)"
+		[ -z $( grep "vm.swappiness=10" /etc/sysctl.conf ) ] && echo 'vm.swappiness=10' >> /etc/sysctl.conf
+	fi
 
-			echo ${VERDE}"===== Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile) ====="${FIN}
-			[ -z $( grep "CONCURRENCY=makefile" /etc/default/rcS ) ] && echo 'CONCURRENCY=makefile' >> /etc/default/rcS
+	if [ -e /etc/default/prelink ]; then
+		ADVERTENCIA "Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink)"
+		echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados ..."
+		echo "Le recomendamos que se tome un buen café venezolano mientras espera."
+		sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/default/prelink
+		sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/default/prelink
+		/etc/cron.daily/prelink
+	fi
 
-		fi
+	if [ -e /etc/inittab ];	then
+		ADVERTENCIA "Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad"
+		sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
+	fi
 
-		if [ -e /etc/sysctl.conf ]
-		then
+	ADVERTENCIA "Añadiendo noatime a /etc/fstab"
 
-			echo ${VERDE}"===== Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness) ====="${FIN}
-			[ -z $( grep "vm.swappiness=10" /etc/sysctl.conf ) ] && echo 'vm.swappiness=10' >> /etc/sysctl.conf
+	if [ $( cat ${FSTAB} | grep "Optimizado para Canaima GNU/Linux" | wc -l ) == 0 ]; then
+		echo "#" >> ${FSTAB}
+		echo "# Optimizado para Canaima GNU/Linux (agregado noatime a las opciones de disco)" >> ${FSTAB}
+		echo "#" >> ${FSTAB}
+	fi
 
-		fi
+	sed -i 's/   / /g' ${FSTAB}
+	sed -i 's/   / /g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
+	sed -i 's/, /,/g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
 
-		if [ -e /etc/default/prelink ]
-		then
+	for datos in $( cat ${FSTAB} | awk '{print $3"##--TOKEN--##"$2"##--TOKEN--##"$4"##--TOKEN--##"$1}' ); do
 
-			echo ${VERDE}"===== Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink) ====="${FIN}
-			echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados ..."
-			echo "Le recomendamos que se tome un buen café venezolano mientras espera."
-			sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/default/prelink
-			sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/default/prelink
-			/etc/cron.daily/prelink
+		for fs in ext2 ext3 ext4 xfs ; do
 
-		fi
-
-		if [ -e /etc/inittab ]
-		then
-
-			echo ${VERDE}"===== Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad ====="${FIN}
-			sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
-			sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
-			sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
-			sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
-
-		fi
-
-		echo ${VERDE}"===== Añadiendo noatime a /etc/fstab ====="${FIN}
-
-		if [ $( cat ${FSTAB} | grep "Optimizado para Canaima GNU/Linux" | wc -l ) == 0 ]
-		then
-
-			echo "#" >> ${FSTAB}
-			echo "# Optimizado para Canaima GNU/Linux (agregado noatime a las opciones de disco)" >> ${FSTAB}
-			echo "#" >> ${FSTAB}
-
-		fi
-
-		sed -i 's/   / /g' ${FSTAB}
-		sed -i 's/   / /g' ${FSTAB}
-		sed -i 's/  / /g' ${FSTAB}
-		sed -i 's/  / /g' ${FSTAB}
-		sed -i 's/, /,/g' ${FSTAB}
-		sed -i 's/  / /g' ${FSTAB}
-		sed -i 's/  / /g' ${FSTAB}
-
-		for datos in $( cat ${FSTAB} | awk '{print $3"##--TOKEN--##"$2"##--TOKEN--##"$4"##--TOKEN--##"$1}' )
-		do
-
-		for fs in ext2 ext3 ext4 xfs
-		do
-
-		if [ $( echo $( expr "$datos" : "$fs" ) ) == 4 ]
-		then
+		if [ $( echo $( expr "$datos" : "$fs" ) ) == 4 ]; then
 
 		parsing=${datos#$fs##--TOKEN--##}
 		dispositivo=$( echo $parsing | sed 's/##--TOKEN--##/ /g' | awk '{print $1}' )
@@ -253,43 +234,29 @@ case ${1} in
 
 			"defaults")
 
-				if [ $dispositivo == "\/" ]
-				then
-
-					sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-
-				else
-
-					sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime/g' ${FSTAB}
-
-				fi
+			if [ $dispositivo == "\/" ]; then
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
+			else
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime/g' ${FSTAB}
+			fi
 
 			;;
 
 			"errors=remount-ro,defaults")
-
 				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-
 			;;
 
 			"defaults,errors=remount-ro")
-
 				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-
 			;;
 
 			"errors=remount-ro")
 
-				if [ $dispositivo == "\/" ]
-				then
-
-					sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-
-				else
-
-					sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' noatime,errors=remount-ro/g' ${FSTAB}
-
-				fi
+			if [ $dispositivo == "\/" ]; then
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
+			else
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' noatime,errors=remount-ro/g' ${FSTAB}
+			fi
 
 			;;
 
@@ -309,7 +276,7 @@ case ${1} in
 
 	*)
 
-		echo "postinst no reconoce el argumento '"${1}"'" >&2
+		ERROR "postinst no reconoce el argumento '"${1}"'" >&2
 		exit 1
 
 	;;
