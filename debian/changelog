@@ -1,3 +1,16 @@
+canaima-escritorio-gnome (3.0+13) unstable; urgency=low
+
+  * [ebcb0fd] Mejorando o script de Lennart Poettering y script de pre-
+    instalación
+  * [160b9ed] Perfeccionando el script de Lennart Poettering
+  * [a39f182] Mejorando interactividad del script de Lennart Poettering.
+    Agregando script en el postrm para deshacerlo.
+  * [8fc2bfc] Mejorando pre-install
+  * [9b8e87e] Corrigiendo scripts del mantenedor
+  * [8a688d3] Mejorando scripts del mantenedor
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Mon, 07 Feb 2011 15:49:42 -0430
+
 canaima-escritorio-gnome (3.0+12) unstable; urgency=low
 
   * [bbbcfbd] Nuevas Dependencias
