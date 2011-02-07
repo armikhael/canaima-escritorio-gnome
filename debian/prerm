@@ -16,46 +16,10 @@
 # términos de la Licencia Pública General de GNU (versión 3).
 
 PKG="canaima-escritorio-gnome"
-VERDE="\033[1;34m"
-ROJO="\033[0;31m"
-FIN="\033[0m"
 
 case ${1} in
 
 	remove|upgrade|deconfigure)
-
-	echo -e ${VERDE}"===== Revirtiendo script de Lennart Poettering ====="${FIN}
-
-        # Para cada usuario en /home/ ...
-        for usuario in /home/*? ;
-        do
-
-                # Obteniendo sólo el nombre del usuario
-                usuario_min=$(basename ${usuario})
-
-                # Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
-                case $(grep ${usuario_min} /etc/shadow) in
-
-                '')
-                # No hace nada si no se encuentra en /etc/shadow
-                ;;
-
-                *)
-
-                BASHRC_F="/home/${usuario_min}/.bashrc"
-
-		[ -e ${BASHRC_F}.respaldo ] && mv ${BASHRC_F}.respaldo ${BASHRC_F}
-		;;
-
-		esac
-	done
-
-	RCLOCAL_F="/etc/rc.local"
-	[ -e ${RCLOCAL_F}.respaldo ] && mv ${RCLOCAL_F}.respaldo ${RCLOCAL_F}
-
-	CGROUP_F="/usr/local/sbin/cgroup_clean"
-	rm -rf ${CGROUP_F}
-
 	;;
 
 	failed-upgrade)

@@ -16,41 +16,140 @@
 # términos de la Licencia Pública General de GNU (versión 3).
 
 PKG="canaima-escritorio-gnome"
+# Color Verde
+VERDE="\e[1;32m"
+# Color Rojo
+ROJO="\e[1;31m"
+# Color Amarillo
+AMARILLO="\e[1;33m"
+# Negrita
+BOLD="\e[1m"
+# Caracter de fin de línea
+FIN="\e[0m"
+
+function ERROR() {
+echo -e ${ROJO}${1}${FIN}
+exit 1
+}
+
+function ADVERTENCIA() {
+echo -e ${AMARILLO}${1}${FIN}
+}
+
+function EXITO() {
+echo -e ${VERDE}${1}${FIN}
+}
 
 case ${1} in
 
 	install|upgrade)
 
+	# ¿No existe la carpeta escritorio?
+	if [ ! -d /etc/skel/Escritorio ]; then
+		[ -h /etc/skel/Escritorio ] && rm -rf /etc/skel/Escritorio
+		[ -f /etc/skel/Escritorio ] && rm -rf /etc/skel/Escritorio
+		mkdir /etc/skel/Escritorio
+		ADVERTENCIA "Creando carpeta Escritorio en /etc/skel/"
+	fi 
 	# ¿Existe un enlace simbólico llamado Desktop?
 	# ¿Y una carpeta llamada Escritorio?
-	if [ -h /etc/skel/Desktop ] && [ -d /etc/skel/Escritorio ]
-	then
-
+	if [ -h /etc/skel/Desktop ] && [ -d /etc/skel/Escritorio ]; then
 		# Borra el enlace simbólico
-		rm -f /etc/skel/Desktop
-
+		rm -rf /etc/skel/Desktop
+		ADVERTENCIA "Removiendo enlace de escritorio Desktop en /etc/skel/"
+	fi
 	# ¿Existe un enlace simbólico llamado Escritorio?
 	# ¿Y una carpeta llamada Desktop?
-	elif [ -h /etc/skel/Escritorio ] && [ -d /etc/skel/Desktop ]
-	then
-
+	if [ -h /etc/skel/Escritorio ] && [ -d /etc/skel/Desktop ]; then
 		# Borra el enlace simbólico
-		rm -f /etc/skel/Escritorio
-
+		rm -rf /etc/skel/Escritorio
 		# y renombra la carpeta a Escritorio
 		mv /etc/skel/Desktop /etc/skel/Escritorio
-
+		ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en /etc/skel/"
+	fi
 	# ¿Existen dos directorios con el mismo propósito?
-        elif [ -d /etc/skel/Escritorio ] && [ -d /etc/skel/Desktop ]
-        then
-
+        if [ -d /etc/skel/Escritorio ] && [ -d /etc/skel/Desktop ]; then
 		# Mueve el contenido de Desktop a Escritorio
 		mv /etc/skel/Desktop/* /etc/skel/Escritorio/
-
 		# Borra la carpeta Desktop
 		rm -rf /etc/skel/Desktop
-
+		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en /etc/skel/"
 	fi
+
+	# Para cada usuario en /home/ ...
+	for usuario in /home/*? ; do
+
+	# Obteniendo sólo el nombre del usuario
+	usuario_min=$(basename ${usuario})
+
+	# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+	case $( grep "${usuario_min}:.*:.*:.*:.*:.*:::" /etc/shadow ) in
+
+	'')
+	# No hace nada si no se encuentra en /etc/shadow
+	;;
+
+	*)
+
+        # ¿No existe la carpeta Escritorio?
+        if [ ! -d ${usuario}/Escritorio ]; then
+		[ -h ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
+		[ -f ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
+                mkdir ${usuario}/Escritorio
+                ADVERTENCIA "Creando carpeta Escritorio en ${usuario}"
+        fi
+	# ¿Existe un enlace simbólico llamado Desktop?
+	# ¿Y una carpeta llamada Escritorio?
+	if [ -h ${usuario}/Desktop ] && [ -d ${usuario}/Escritorio ]; then
+		# Borra el enlace simbólico
+		rm -f ${usuario}/Desktop
+		ADVERTENCIA "Removiendo enlace de escritorio Desktop en ${usuario}"
+	fi
+	# ¿Existe un enlace simbólico llamado Escritorio?
+	# ¿Y una carpeta llamada Desktop?
+	if [ -h ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
+		# Borra el enlace simbólico
+		rm -f ${usuario}/Escritorio
+		# y renombra la carpeta a Escritorio
+		mv ${usuario}/Desktop ${usuario}/Escritorio
+		ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en ${usuario}"
+	fi
+	# ¿Existen dos directorios con el mismo propósito?
+        if [ -d ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
+		# Mueve el contenido de Desktop a Escritorio
+		mv ${usuario}/Desktop/* ${usuario}/Escritorio/
+		# Borra la carpeta Desktop
+		rm -rf ${usuario}/Desktop
+		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en ${usuario}"
+	fi
+
+	# Configuremos XDG para que use como locale "es_VE" y
+	# Escritorio como carpeta de usuario predeterminada
+
+	echo "es_VE" > ${usuario}/.config/user-dirs.locale
+
+cat <<EOF >${usuario}/.config/user-dirs.dirs
+# This file is written by xdg-user-dirs-update
+# If you want to change or add directories, just edit the line you're
+# interested in. All local changes will be retained on the next run
+# Format is XDG_xxx_DIR="\$HOME/yyy", where yyy is a shell-escaped
+# homedir-relative path, or XDG_xxx_DIR="/yyy", where /yyy is an
+# absolute path. No other format is supported.
+#
+XDG_DESKTOP_DIR="\$HOME/Escritorio"
+XDG_DOWNLOAD_DIR="\$HOME/Descargas"
+XDG_TEMPLATES_DIR="\$HOME/Plantillas"
+XDG_PUBLICSHARE_DIR="\$HOME/Público"
+XDG_DOCUMENTS_DIR="\$HOME/Documentos"
+XDG_MUSIC_DIR="\$HOME/Música"
+XDG_PICTURES_DIR="\$HOME/Imágenes"
+XDG_VIDEOS_DIR="\$HOME/Videos"
+
+EOF
+	;;
+
+	esac
+	done
 
 cat <<EOF >/etc/xdg/user-dirs.defaults
 # Default settings for user directories
@@ -72,91 +171,19 @@ VIDEOS=Videos
 
 EOF
 
-	# Para cada usuario en /home/ ...
-	for usuario in /home/*? ;
-	do
-
-	# Obteniendo sólo el nombre del usuario
-	usuario_min=$(basename ${usuario})
-
-	# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
-	case $( grep ${usuario_min} /etc/shadow ) in
-
-	'')
-	# No hace nada si no se encuentra en /etc/shadow
-	;;
-
-	*)
-
-	# ¿Existe un enlace simbólico llamado Desktop?
-	# ¿Y una carpeta llamada Escritorio?
-	if [ -h ${usuario}/Desktop ] && [ -d ${usuario}/Escritorio ]
-	then
-
-		# Borra el enlace simbólico
-		rm -f ${usuario}/Desktop
-
-	# ¿Existe un enlace simbólico llamado Escritorio?
-	# ¿Y una carpeta llamada Desktop?
-	elif [ -h ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]
-	then
-
-		# Borra el enlace simbólico
-		rm -f ${usuario}/Escritorio
-
-		# y renombra la carpeta a Escritorio
-		mv ${usuario}/Desktop ${usuario}/Escritorio
-
-	# ¿Existen dos directorios con el mismo propósito?
-        elif [ -d ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]
-        then
-
-		# Mueve el contenido de Desktop a Escritorio
-		mv ${usuario}/Desktop/* ${usuario}/Escritorio/
-
-		# Borra la carpeta Desktop
-		rm -rf ${usuario}/Desktop
-	
+	# Actualicemos la configuración
+	if [ -x $( which xdg-user-dirs-update ) ]; then
+		xdg-user-dirs-update
+		EXITO "Carpetas de usuario actualizadas"
 	fi
 
-	# Configuremos XDG para que use como locale "es_VE" y
-	# Escritorio como carpeta de usuario predeterminada
-
-	echo "es_VE" > ${usuario}/.config/user-dirs.locale
-
-cat <<EOF >${usuario}/.config/user-dirs.dirs
-# This file is written by xdg-user-dirs-update
-# If you want to change or add directories, just edit the line you're
-# interested in. All local changes will be retained on the next run
-# Format is XDG_xxx_DIR="$HOME/yyy", where yyy is a shell-escaped
-# homedir-relative path, or XDG_xxx_DIR="/yyy", where /yyy is an
-# absolute path. No other format is supported.
-#
-XDG_DESKTOP_DIR="$HOME/Escritorio"
-XDG_DOWNLOAD_DIR="$HOME/Descargas"
-XDG_TEMPLATES_DIR="$HOME/Plantillas"
-XDG_PUBLICSHARE_DIR="$HOME/Público"
-XDG_DOCUMENTS_DIR="$HOME/Documentos"
-XDG_MUSIC_DIR="$HOME/Música"
-XDG_PICTURES_DIR="$HOME/Imágenes"
-XDG_VIDEOS_DIR="$HOME/Videos"
-
-EOF
-
-	# Actualicemos la configuración
-	xdg-user-dirs-update
-
-	;;
-
-	esac
-	done
 	;;
 
 	abort-upgrade)
 	;;
 
 	*)
-		echo "preinst no reconoce el argumento '"${1}"'" >&2
+		ERROR "preinst no reconoce el argumento '"${1}"'" >&2
 		exit 1
 	;;
 

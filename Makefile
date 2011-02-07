@@ -2,13 +2,16 @@
 
 SHELL := sh -e
 
-SCRIPTS = "debian/preinst install" "debian/postinst configure" "debian/prerm remove" "debian/postrm remove"
+SCRIPTS =	"debian/preinst install" \
+		"debian/postinst configure" \
+		"debian/prerm remove" \
+		"debian/postrm remove" \
 
-all: test build
+all: build
 
 test:
 
-	@echo -n "\n===== Comprobando posibles errores de sintaxis en los scripts de mantenedor =====\n\n"
+	@echo -n "\n===== Comprobando posibles errores de sintaxis en los scripts de mantenedor =====\n"
 
 	@for SCRIPT in $(SCRIPTS); \
 	do \
@@ -16,7 +19,7 @@ test:
 		bash -n $${SCRIPT}; \
 	done
 
-	@echo -n "\n=================================================================================\nHECHO!\n\n"
+	@echo -n "¡TODO BIEN!\n=================================================================================\n\n"
 
 build:
 
