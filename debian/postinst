@@ -16,12 +16,31 @@
 # términos de la Licencia Pública General de GNU (versión 3).
 
 PKG="canaima-escritorio-gnome"
-LIST="acpid apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops saned acpi-fakekey acpi-support apmd canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh klogd live-initramfs ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy sysklogd tpconfig xdebconfigurator nfs-common statd"
-FSTAB=/etc/fstab
-LAPTOP=""
+LIST="apmd anacron avahi-daemon bluetooth bluez-utils fetchmail dns-clean atd portmap rsync exim4 kerneloops acpi-fakekey acpi-support canaima-bienvenido-video cryptdisks cryptdisks-early dhcdbd fam hibernate hotkey-setup kbd keymap.sh live-initramfs ntp openvpn pcmciautils pppd-dns resolvconf samba screen-cleanup splashy tpconfig xdebconfigurator nfs-common statd"
+FSTAB="/etc/fstab"
+# Color Verde
 VERDE="\e[1;32m"
-ROJO="\e[0;31m"
+# Color Rojo
+ROJO="\e[1;31m"
+# Color Amarillo
+AMARILLO="\e[1;33m"
+# Negrita
+BOLD="\e[1m"
+# Caracter de fin de línea
 FIN="\e[0m"
+
+function ERROR() {
+echo -e ${ROJO}${1}${FIN}
+exit 1
+}
+
+function ADVERTENCIA() {
+echo -e ${AMARILLO}${1}${FIN}
+}
+
+function EXITO() {
+echo -e ${VERDE}${1}${FIN}
+}
 
 if [ -n "$(which laptop-detect)" ]; then
 	if laptop-detect >/dev/null; then
@@ -33,138 +52,126 @@ case ${1} in
 
 	configure)
 
-echo -e ${VERDE}"===== Parcheando el sistema con el script de Lennart Poettering ====="${FIN}
+	#----- Inicio del parche de Lennart Poettering ---------------------------------------------------------------#
+	#=============================================================================================================#
+	ADVERTENCIA "Parcheando el sistema con el script de Lennart Poettering"
 
-# Para cada usuario en /home/ ...
-for usuario in /home/*? ;
-do
+	# Para cada usuario en /home/ ...
+	for usuario in /home/*? ; do
 
-# Obtenemos sólo el nombre del usuario
-usuario_min=$(basename ${usuario})
+		# Obtenemos sólo el nombre del usuario
+		usuario_min=$(basename ${usuario})
 
-# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
-case $(grep ${usuario_min} /etc/shadow) in
+		# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+		case $(grep "${usuario_min}:.*:.*:.*:.*:.*:::" /etc/shadow) in
 
-'')
-# No hace nada si no se encuentra en /etc/shadow
-;;
+			'')
+			# No hace nada si no se encuentra en /etc/shadow
+			;;
 
-*)
+			*)
 
-# Especificamos cuál es el archivo .bashrc
-BASHRC_F="/home/${usuario_min}/.bashrc"
+			# Especificamos cuál es el archivo .bashrc
+			BASHRC_F="/home/${usuario_min}/.bashrc"
 
-# Si la línea "/dev/cgroup/cpu/user" no se encuentra en el archivo .bashrc,
-# quiere decir que el script no ha sido implementado en éste sistema
-if [ $( cat ${BASHRC_F} | grep "/dev/cgroup/cpu/user" | wc -l ) == "0" ];
-then
+			# Si la línea "/dev/cgroup/cpu/user" no se encuentra en el archivo .bashrc,
+			# quiere decir que el script no ha sido implementado en éste sistema
+			if [ $( cat ${BASHRC_F} | grep "/dev/cgroup/cpu/user" | wc -l ) == "0" ]; then
 
-# Respaldamos el archivo .bashrc anterior en .bashrc.respaldo
-echo "Respaldando ${BASHRC_F} en ${BASHRC_F}.respaldo"
-[ ! -e ${BASHRC_F}.respaldo ] && cp ${BASHRC_F} ${BASHRC_F}.respaldo
+				# Respaldamos el archivo .bashrc anterior en .bashrc.respaldo
+				echo "Respaldando ${BASHRC_F} en ${BASHRC_F}.respaldo"
+				[ ! -e ${BASHRC_F}.respaldo ] && cp ${BASHRC_F} ${BASHRC_F}.respaldo
 
-echo "Parcheando ${BASHRC_F}"
+				echo "Parcheando ${BASHRC_F}"
 
-# Éste bloque de código se agrega al archivo .bashrc y es parte de lo propuesto por 
-# Lennart Poettering.
-echo "if [ \"\$PS1\" ] ; then" >> ${BASHRC_F}
-echo "mkdir -p -m 0700 /dev/cgroup/cpu/user/\$\$ > /dev/null 2>&1" >> ${BASHRC_F}
-echo "echo \$\$ > /dev/cgroup/cpu/user/\$\$/tasks" >> ${BASHRC_F}
-echo "echo \"1\" > /dev/cgroup/cpu/user/\$\$/notify_on_release" >> ${BASHRC_F}
-echo "fi" >> ${BASHRC_F}
+				# Éste bloque de código se agrega al archivo .bashrc y es parte de lo propuesto por 
+				# Lennart Poettering.
+				echo "if [ \"\$PS1\" ] ; then" >> ${BASHRC_F}
+				echo "mkdir -p -m 0700 /dev/cgroup/cpu/user/\$\$ > /dev/null 2>&1" >> ${BASHRC_F}
+				echo "echo \$\$ > /dev/cgroup/cpu/user/\$\$/tasks" >> ${BASHRC_F}
+				echo "echo \"1\" > /dev/cgroup/cpu/user/\$\$/notify_on_release" >> ${BASHRC_F}
+				echo "fi" >> ${BASHRC_F}
 
-chown ${usuario_min}:${usuario_min} ${BASHRC_F}
-
-else
-
-# Si la línea "/dev/cgroup/cpu/user" se encuentra presente en el archivo
-# .bashrc quiere decir que ya se aplicó el script. Se ignora.
-echo -e ${ROJO}"Parece que ya aplicaste el patch a ${BASHRC_F} con anterioridad. Ignorando."${FIN}
-
-fi
-
-;;
-
-esac
-
-done
-
-# Especificando donde está el archivo rc.local
-RCLOCAL_F="/etc/rc.local"
-
-# Si la línea "/dev/cgroup/cpu/release_agent" no se encuentra en el archivo rc.local,
-# quiere decir que el script no ha sido implementado en éste sistema
-if [ $( cat ${RCLOCAL_F} | grep "/dev/cgroup/cpu/release_agent" | wc -l ) == "0" ];
-then
-
-# Determinemos cuál es el número de línea del último comando "exit 0" dentro del archivo rc.local
-INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
-
-# Respaldamos el archivo rc.local en rc.local.respaldo
-echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
-[ ! -e ${RCLOCAL_F}.respaldo ] && cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
-
-echo "Parcheando ${RCLOCAL_F}"
-
-# Insertamos éste bloque de código justo antes del último "exit 0" en un archivo temporal rc.local.nuevo
-sed "${INSERTAR}imkdir -p /dev/cgroup/cpu\nmount -t cgroup cgroup /dev/cgroup/cpu -o cpu\nmkdir -m 0777 /dev/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /dev/cgroup/cpu/release_agent" /etc/rc.local >> "${RCLOCAL_F}.nuevo"
-
-# Movemos el archivo temporal a su ubicación permanente
-mv ${RCLOCAL_F}.nuevo ${RCLOCAL_F}
-
-echo "Otorgando permisos de ejecución a ${RCLOCAL_F}"
-chmod +x ${RCLOCAL_F}
-
-else
-
-# Si la línea "/dev/cgroup/cpu/release_agent" se encuentra presente en el archivo
-# rc.local quiere decir que ya se aplicó el script. Se ignora.
-echo -e ${ROJO}"Parece que ya aplicaste el patch a ${RCLOCAL_F} con anterioridad. Ignorando."${FIN}
-
-fi
-
-# Especificando donde está el archivo cgroup_clean
-CGROUP_F="/usr/local/sbin/cgroup_clean"
-
-echo "Creando ${CGROUP_F}"
-
-# Insertamos el siguiente bloque de código en cgroup_clean
-echo "#!/bin/sh" > ${CGROUP_F}
-echo "if [ \"\$*\" != \"/user\" ]; then" >> ${CGROUP_F}
-echo "rmdir /dev/cgroup/cpu/\$*" >> ${CGROUP_F}
-echo "fi" >> ${CGROUP_F}
-
-echo "Otorgando permisos de ejecución a ${CGROUP_F}"
-chmod +x ${CGROUP_F}
-
-		echo ${VERDE}"===== Removiendo scripts de inicio usualmente innecesarios ====="${FIN}
-
-		for list in ${LIST}
-		do
-
-			if [ -n $LAPTOP ]
-			then
-
-				if [ ${list} != "acpid" ] || [ ${list} != "apmd" ]
-				then
-
-					update-rc.d -f ${list} remove
-					[ -e /etc/init.d/${list} ] && rm -rf /etc/init.d/${list}
-				fi
+				chown ${usuario_min}:${usuario_min} ${BASHRC_F}
 
 			else
 
-				update-rc.d -f ${list} remove
-				[ -e /etc/init.d/${list} ] && rm -rf /etc/init.d/${list}
+				# Si la línea "/dev/cgroup/cpu/user" se encuentra presente en el archivo
+				# .bashrc quiere decir que ya se aplicó el script. Se ignora.
+				ERROR "Parece que ya aplicaste el patch a ${BASHRC_F} con anterioridad. Ignorando."
 
 			fi
 
-		done
+			;;
+		esac
+	done
 
-		if [ -e /etc/default/avahi-daemon ]
-		then
+	# Especificando donde está el archivo rc.local
+	RCLOCAL_F="/etc/rc.local"
 
-			echo ${VERDE}"===== Asegurando que avahi-daemon no inicie ====="${FIN}
+	# Si la línea "/dev/cgroup/cpu/release_agent" no se encuentra en el archivo rc.local,
+	# quiere decir que el script no ha sido implementado en éste sistema
+	if [ $( cat ${RCLOCAL_F} | grep "/dev/cgroup/cpu/release_agent" | wc -l ) == "0" ]; then
+
+		# Determinemos cuál es el número de línea del último comando "exit 0" dentro del archivo rc.local
+		INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
+
+		# Respaldamos el archivo rc.local en rc.local.respaldo
+		echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
+		[ ! -e ${RCLOCAL_F}.respaldo ] && cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
+
+		echo "Parcheando ${RCLOCAL_F}"
+
+		# Insertamos éste bloque de código justo antes del último "exit 0" en un archivo temporal rc.local.nuevo
+		sed "${INSERTAR}imkdir -p /dev/cgroup/cpu\nmount -t cgroup cgroup /dev/cgroup/cpu -o cpu\nmkdir -m 0777 /dev/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /dev/cgroup/cpu/release_agent" /etc/rc.local >> "${RCLOCAL_F}.nuevo"
+
+		# Movemos el archivo temporal a su ubicación permanente
+		mv ${RCLOCAL_F}.nuevo ${RCLOCAL_F}
+
+		echo "Otorgando permisos de ejecución a ${RCLOCAL_F}"
+		chmod +x ${RCLOCAL_F}
+
+	else
+
+		# Si la línea "/dev/cgroup/cpu/release_agent" se encuentra presente en el archivo
+		# rc.local quiere decir que ya se aplicó el script. Se ignora.
+		ERROR "Parece que ya aplicaste el patch a ${RCLOCAL_F} con anterioridad. Ignorando."
+
+	fi
+
+	# Especificando donde está el archivo cgroup_clean
+	CGROUP_F="/usr/local/sbin/cgroup_clean"
+
+	echo "Creando ${CGROUP_F}"
+
+	# Insertamos el siguiente bloque de código en cgroup_clean
+	echo "#!/bin/sh" > ${CGROUP_F}
+	echo "if [ \"\$*\" != \"/user\" ]; then" >> ${CGROUP_F}
+	echo "rmdir /dev/cgroup/cpu/\$*" >> ${CGROUP_F}
+	echo "fi" >> ${CGROUP_F}
+
+	echo "Otorgando permisos de ejecución a ${CGROUP_F}"
+	chmod +x ${CGROUP_F}
+
+	#----- Fin del parche de Lennart Poettering ------------------------------------------------------------------#
+	#=============================================================================================================#
+
+	ADVERTENCIA "Removiendo scripts de inicio usualmente innecesarios"
+
+	for list in ${LIST}; do
+		if [ -n ${LAPTOP} ]; then
+			if [ ${list} != "bluetooth" ] || [ ${list} != "bluez-utils" ] || [ ${list} != "hibernate" ] || [ ${list} != "pcmciautils" ]; then
+				update-rc.d -f ${list} remove
+				rm -rf /etc/init.d/${list}
+			fi
+		else
+			update-rc.d -f ${list} remove
+			rm -rf /etc/init.d/${list}
+		fi
+	done
+
+	if [ -e /etc/default/avahi-daemon ]; then
+		ADVERTENCIA "===== Asegurando que avahi-daemon no inicie"
 			sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/default/avahi-daemon
 
 		fi

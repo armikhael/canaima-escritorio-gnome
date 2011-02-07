@@ -96,22 +96,23 @@ case ${1} in
 		[ -h ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
 		[ -f ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
                 mkdir ${usuario}/Escritorio
-                ADVERTENCIA "Creando carpeta Escritorio en /etc/skel/"
+                ADVERTENCIA "Creando carpeta Escritorio en ${usuario}"
         fi
 	# ¿Existe un enlace simbólico llamado Desktop?
 	# ¿Y una carpeta llamada Escritorio?
 	if [ -h ${usuario}/Desktop ] && [ -d ${usuario}/Escritorio ]; then
 		# Borra el enlace simbólico
 		rm -f ${usuario}/Desktop
+		ADVERTENCIA "Removiendo enlace de escritorio Desktop en ${usuario}"
 	fi
 	# ¿Existe un enlace simbólico llamado Escritorio?
 	# ¿Y una carpeta llamada Desktop?
 	if [ -h ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
 		# Borra el enlace simbólico
 		rm -f ${usuario}/Escritorio
-
 		# y renombra la carpeta a Escritorio
 		mv ${usuario}/Desktop ${usuario}/Escritorio
+		ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en ${usuario}"
 	fi
 	# ¿Existen dos directorios con el mismo propósito?
         if [ -d ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
@@ -119,6 +120,7 @@ case ${1} in
 		mv ${usuario}/Desktop/* ${usuario}/Escritorio/
 		# Borra la carpeta Desktop
 		rm -rf ${usuario}/Desktop
+		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en ${usuario}"
 	fi
 
 	# Configuremos XDG para que use como locale "es_VE" y
@@ -172,6 +174,7 @@ EOF
 	# Actualicemos la configuración
 	if [ -x $( which xdg-user-dirs-update ) ]; then
 		xdg-user-dirs-update
+		EXITO "Carpetas de usuario actualizadas"
 	fi
 
 	;;
