@@ -96,6 +96,7 @@ case ${1} in
 		[ -h ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
 		[ -f ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
                 mkdir ${usuario}/Escritorio
+		chown -R ${usuario_min}:${usuario_min} ${usuario}/Escritorio
                 ADVERTENCIA "Creando carpeta Escritorio en ${usuario}"
         fi
 	# ¿Existe un enlace simbólico llamado Desktop?
@@ -112,12 +113,14 @@ case ${1} in
 		rm -f ${usuario}/Escritorio
 		# y renombra la carpeta a Escritorio
 		mv ${usuario}/Desktop ${usuario}/Escritorio
+		chown -R ${usuario_min}:${usuario_min} ${usuario}/Escritorio
 		ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en ${usuario}"
 	fi
 	# ¿Existen dos directorios con el mismo propósito?
         if [ -d ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
 		# Mueve el contenido de Desktop a Escritorio
 		mv ${usuario}/Desktop/* ${usuario}/Escritorio/
+		chown -R ${usuario_min}:${usuario_min} ${usuario}/Escritorio
 		# Borra la carpeta Desktop
 		rm -rf ${usuario}/Desktop
 		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en ${usuario}"
@@ -146,6 +149,9 @@ XDG_PICTURES_DIR="\$HOME/Imágenes"
 XDG_VIDEOS_DIR="\$HOME/Videos"
 
 EOF
+
+	chown ${usuario_min}:${usuario_min} ${usuario}/.config/user-dirs.dirs
+	chown ${usuario_min}:${usuario_min} ${usuario}/.config/user-dirs.locale
 	;;
 
 	esac
