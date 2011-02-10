@@ -1,3 +1,11 @@
+canaima-escritorio-gnome (3.0+18) unstable; urgency=low
+
+  * [a125063] Agregando pre-dependencia de xdg-user-dirs, necesitamos
+    que ya hayan ciertos archivos puestos para poder realizar un sed
+    correctamente
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 09 Feb 2011 21:01:36 -0430
+
 canaima-escritorio-gnome (3.0+17) unstable; urgency=low
 
   * [3ff5ec6] Agregando dependencias de alsa, para el sonido
