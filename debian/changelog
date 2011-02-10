@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+19) unstable; urgency=low
+
+  * [556694c] Agregando dependencia a CUPS
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Thu, 10 Feb 2011 00:52:01 -0430
+
 canaima-escritorio-gnome (3.0+18) unstable; urgency=low
 
   * [a125063] Agregando pre-dependencia de xdg-user-dirs, necesitamos
