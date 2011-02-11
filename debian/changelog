@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.0+20) unstable; urgency=low
+
+  * [6e335cd] Moviendo el preinst al postinst y agregando pre-
+    dependencias
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 11 Feb 2011 16:08:56 -0430
+
 canaima-escritorio-gnome (3.0+19) unstable; urgency=low
 
   * [556694c] Agregando dependencia a CUPS
