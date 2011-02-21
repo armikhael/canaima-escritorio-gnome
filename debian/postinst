@@ -341,6 +341,10 @@ echo "Parcheando ${RCLOCAL_F}"
 		sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
 	fi
 
+	DESHABILITAR_FSTAB=1
+
+	if [ ${DESHABILITAR_FSTAB} == 0 ]; then
+
 	ADVERTENCIA "Añadiendo noatime a /etc/fstab"
 
 	if [ $( cat ${FSTAB} | grep "Optimizado para Canaima GNU/Linux" | wc -l ) == 0 ]; then
@@ -405,8 +409,9 @@ echo "Parcheando ${RCLOCAL_F}"
 
 		done
 
-		done
+	done
 
+	fi
 
 	;;
 
