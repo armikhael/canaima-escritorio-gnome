@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+22) unstable; urgency=low
+
+  * [5524e62] Agregando dependencia a canaima-accesibilidad
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Tue, 22 Feb 2011 12:05:00 -0430
+
 canaima-escritorio-gnome (3.0+21) unstable; urgency=low
 
   * [f31ec8b] Deshabilitando optimización del FSTAB
