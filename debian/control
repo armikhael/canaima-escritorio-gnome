@@ -11,8 +11,8 @@ Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome/tre
 
 Package: canaima-escritorio-gnome
 Architecture: all
-Depends: gnome-core, canaima-web, canaima-multimedia, canaima-ofimatica, base-files (>= 5.9+1canaima0), lsb-core (>= 3.2-23.1canaima0), lsb-release (>= 3.2-23.1canaima0), desktop-base (>= 5.0.6canaima4), canaima-chat (>= 3.0), canaima-bienvenido (>= 3.0), canaima-acerca (>= 3.0), canaima-estilo-visual (>= 3.0), canaima-llaves (>= 3.0), canaima-notas, amigu (>= 0.6.3+4canaima4), synaptic, system-config-printer, gnome-system-tools, software-properties-gtk, alacarte, gnome-screenshot, gnome-media, gparted, seahorse, menu, gnome-system-monitor, gnome-search-tool, gcalctool, usbutils, ${shlibs:Depends}, ${misc:Depends}
+Depends: gnome-core, canaima-web, canaima-multimedia, canaima-ofimatica, desktop-base (>= 5.0.6canaima4), canaima-chat (>= 3.0), canaima-bienvenido (>= 3.0), canaima-acerca (>= 3.0), canaima-estilo-visual (>= 3.0), canaima-notas, amigu (>= 0.6.3+4canaima4), synaptic, system-config-printer, gnome-system-tools, software-properties-gtk, alacarte, gnome-screenshot, gnome-media, gparted, seahorse, menu, gnome-system-monitor, gnome-search-tool, gcalctool, ${shlibs:Depends}, ${misc:Depends}
 Conflicts: gdm
-Pre-Depends: xdg-user-dirs, avahi-daemon, sysv-rc, procps, xserver-xorg, alsa-base, alsa-utils, xinit, gdm3, cups, readahead, preload, prelink, locales, laptop-detect, sysvinit
+Pre-Depends: xdg-user-dirs, xserver-xorg, alsa-base, alsa-utils, gdm3, cups, canaima-base (>= 3.0)
 Description: Archivos base de Canaima GNU/Linux
  Este paquete provee los archivos base de Canaima GNU/Linux.
