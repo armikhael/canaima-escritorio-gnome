@@ -52,6 +52,9 @@ case ${1} in
 
 	configure)
 
+	ADVERTENCIA "Corrigiendo bug del Network-Manager de Debian"
+	sed -i 's/managed=.*/managed=true/g' /etc/NetworkManager/NetworkManager.conf
+
 	# ¿No existe la carpeta escritorio?
 	if [ ! -d /etc/skel/Escritorio ]; then
 		[ -h /etc/skel/Escritorio ] && rm -rf /etc/skel/Escritorio

@@ -1,3 +1,11 @@
+canaima-escritorio-gnome (3.0+24) unstable; urgency=low
+
+  * [bcf9b26] Modificando dependencias
+  * [8e70531] Redistribuyendo dependencias y procedimientos entre
+    canaima-base y canaima-escritorio-gnome.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 16 Mar 2011 05:06:43 -0430
+
 canaima-escritorio-gnome (3.0+23) unstable; urgency=low
 
   * [faa286e] Agregando dependencias
