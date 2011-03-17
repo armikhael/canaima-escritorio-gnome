@@ -31,7 +31,6 @@ FIN="\e[0m"
 
 function ERROR() {
 echo -e ${ROJO}${1}${FIN}
-exit 1
 }
 
 function ADVERTENCIA() {
