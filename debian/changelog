@@ -1,3 +1,12 @@
+canaima-escritorio-gnome (3.0+25) unstable; urgency=low
+
+  * [9742ee3] Removiendop del postrm el script que revierte el parche de
+    Lennart Poettering
+  * [fe883a6] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: control
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 18 Mar 2011 00:21:57 -0430
+
 canaima-escritorio-gnome (3.0+24) unstable; urgency=low
 
   * [bcf9b26] Modificando dependencias
