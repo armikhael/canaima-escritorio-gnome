@@ -11,9 +11,9 @@ Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome/tre
 
 Package: canaima-escritorio-gnome
 Architecture: all
-Depends: gnome-core, canaima-web, canaima-multimedia, canaima-ofimatica, desktop-base (>= 5.0.6canaima4), canaima-chat (>= 3.0), canaima-bienvenido (>= 3.0), canaima-acerca (>= 3.0), canaima-estilo-visual (>= 3.0), canaima-notas, amigu (>= 0.6.3+4canaima4), synaptic, system-config-printer, gnome-system-tools, software-properties-gtk, alacarte, gnome-screenshot, gnome-media, gparted, seahorse, menu, gnome-system-monitor, gnome-search-tool, gcalctool, gnome-codec-install, xdg-user-dirs-gtk, canaima-base (>= 3.0), ${shlibs:Depends}, ${misc:Depends}
+Depends: gnome-core, canaima-web, canaima-multimedia, canaima-ofimatica, acpi-support, desktop-base (>= 5.0.6canaima4), canaima-chat (>= 3.0), canaima-bienvenido (>= 3.0), canaima-acerca (>= 3.0), canaima-estilo-visual (>= 3.0), canaima-notas, amigu (>= 0.6.3+4canaima4), synaptic, system-config-printer, gnome-system-tools, software-properties-gtk, alacarte, gnome-screenshot, gnome-media, gparted, seahorse, menu, gnome-system-monitor, gnome-search-tool, gcalctool, gnome-codec-install, xdg-user-dirs-gtk, canaima-base (>= 3.0), ${shlibs:Depends}, ${misc:Depends}
 Conflicts: gdm
-Pre-Depends: xdg-user-dirs, xserver-xorg, alsa-base, alsa-utils, gdm3, cups, canaima-base (>= 3.0)
+Pre-Depends: xdg-user-dirs, xserver-xorg, alsa-base, alsa-utils, gdm3, cups, xinit, canaima-base (>= 3.0)
 Recommends: canaima-blobs, canaima-aplicaciones-extendidas
 Description: Archivos base de Canaima GNU/Linux
  Este paquete provee los archivos base de Canaima GNU/Linux.
