@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+28) unstable; urgency=low
+
+  * [b897bba] Agregando dependencia a mesa-utils.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Tue, 22 Mar 2011 09:47:14 -0430
+
 canaima-escritorio-gnome (3.0+27) unstable; urgency=low
 
   * [3b221f7] Agregando dependencia a acpi-support y xinit que fueron
