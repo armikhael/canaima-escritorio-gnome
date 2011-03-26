@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.0+29) unstable; urgency=low
+
+  * [408de2f] Corrigiendo forma en que se ponen las carpetas del usuario
+    mediante el comando xdg-user-dirs-update.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Sat, 26 Mar 2011 11:18:15 -0430
+
 canaima-escritorio-gnome (3.0+28) unstable; urgency=low
 
   * [b897bba] Agregando dependencia a mesa-utils.
