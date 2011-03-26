@@ -86,6 +86,26 @@ case ${1} in
 		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en /etc/skel/"
 	fi
 
+cat <<EOF >/etc/xdg/user-dirs.defaults
+# Default settings for user directories
+#
+# The values are relative pathnames from the home directory and
+# will be translated on a per-path-element basis into the users locale
+DESKTOP=Escritorio
+DOWNLOAD=Descargas
+TEMPLATES=Plantillas
+PUBLICSHARE=Público
+DOCUMENTS=Documentos
+MUSIC=Música
+PICTURES=Imágenes
+VIDEOS=Videos
+# Another alternative is:
+#MUSIC=Documents/Music
+#PICTURES=Documents/Pictures
+#VIDEOS=Documents/Videos
+
+EOF
+
 	# Para cada usuario en /home/ ...
 	for usuario in /home/*? ; do
 
@@ -162,35 +182,12 @@ EOF
 
 	chown ${usuario_min}:${usuario_min} ${usuario}/.config/user-dirs.dirs
 	chown ${usuario_min}:${usuario_min} ${usuario}/.config/user-dirs.locale
-	;;
-
-	esac
-	done
-
-cat <<EOF >/etc/xdg/user-dirs.defaults
-# Default settings for user directories
-#
-# The values are relative pathnames from the home directory and
-# will be translated on a per-path-element basis into the users locale
-DESKTOP=Escritorio
-DOWNLOAD=Descargas
-TEMPLATES=Templates
-PUBLICSHARE=Público
-DOCUMENTS=Documentos
-MUSIC=Música
-PICTURES=Imágenes
-VIDEOS=Videos
-# Another alternative is:
-#MUSIC=Documents/Music
-#PICTURES=Documents/Pictures
-#VIDEOS=Documents/Videos
-
-EOF
 
 	# Actualicemos la configuración
 	if [ -x $( which xdg-user-dirs-update ) ]; then
-		xdg-user-dirs-update
-		EXITO "Carpetas de usuario actualizadas"
+		su ${usuario_min} --command "xdg-user-dirs-update"
+		su ${usuario_min} --command "xdg-user-dirs-update --force"
+		EXITO "Carpetas de usuario actualizadas para '"${usuario_min}"'"
 	fi
 
 	#----- Inicio del parche de Lennart Poettering ---------------------------------------------------------------#
@@ -414,6 +411,11 @@ echo "Parcheando ${RCLOCAL_F}"
 	done
 
 	fi
+
+	;;
+
+	esac
+	done
 
 	;;
 
