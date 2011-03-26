@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.0+30) unstable; urgency=low
+
+  * [09e17ed] Se corrige error al realizar mv de carpeta cuando no tiene
+    contenido
+
+ -- Carlos Guerrero <guerrerocarlos@gmail.com>  Sat, 26 Mar 2011 18:23:01 -0430
+
 canaima-escritorio-gnome (3.0+29) unstable; urgency=low
 
   * [408de2f] Corrigiendo forma en que se ponen las carpetas del usuario
