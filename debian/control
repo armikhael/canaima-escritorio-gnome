@@ -16,4 +16,4 @@ Conflicts: gdm
 Pre-Depends: xdg-user-dirs, xserver-xorg, alsa-base, alsa-utils, gdm3, cups, xinit, canaima-base (>= 3.0)
 Recommends: canaima-blobs, canaima-aplicaciones-extendidas
 Description: Archivos base de Canaima GNU/Linux
- Este paquete provee los archivos base de Canaima GNU/Linux.
+ Este paquete provee los archivos basicos para el funcionamiento de un sistema GNOME de Canaima GNU/Linux.
