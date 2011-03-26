@@ -80,7 +80,9 @@ case ${1} in
 	# ¿Existen dos directorios con el mismo propósito?
         if [ -d /etc/skel/Escritorio ] && [ -d /etc/skel/Desktop ]; then
 		# Mueve el contenido de Desktop a Escritorio
-		mv /etc/skel/Desktop/* /etc/skel/Escritorio/
+        if [ $( ls -lah /etc/skel/Desktop | wc -l ) -gt 3 ]; then
+    		mv /etc/skel/Desktop/* /etc/skel/Escritorio/
+        fi
 		# Borra la carpeta Desktop
 		rm -rf /etc/skel/Desktop
 		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en /etc/skel/"
@@ -149,7 +151,9 @@ EOF
 	# ¿Existen dos directorios con el mismo propósito?
         if [ -d ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
 		# Mueve el contenido de Desktop a Escritorio
-		mv ${usuario}/Desktop/* ${usuario}/Escritorio/
+        if [ $( ls -lah ${usuario}/Desktop | wc  -l ) -gt 3 ]; then
+    		mv ${usuario}/Desktop/* ${usuario}/Escritorio/
+        fi
 		chown -R ${usuario_min}:${usuario_min} ${usuario}/Escritorio
 		# Borra la carpeta Desktop
 		rm -rf ${usuario}/Desktop
