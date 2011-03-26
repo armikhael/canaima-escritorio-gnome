@@ -194,6 +194,228 @@ EOF
 		EXITO "Carpetas de usuario actualizadas para '"${usuario_min}"'"
 	fi
 
+	#----- Inicio del parche de Lennart Poettering ---------------------------------------------------------------#
+	#=============================================================================================================#
+	ADVERTENCIA "Parcheando el sistema con el script de Lennart Poettering"
+
+	# Para cada usuario en /home/ ...
+	for usuario in /home/*? ; do
+
+		# Obtenemos sólo el nombre del usuario
+		usuario_min=$(basename ${usuario})
+
+		# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+		case $(grep "${usuario_min}:.*:.*:.*:.*:.*:::" /etc/shadow) in
+
+			'')
+			# No hace nada si no se encuentra en /etc/shadow
+			;;
+
+			*)
+
+			# Especificamos cuál es el archivo .bashrc
+			BASHRC_F="/home/${usuario_min}/.bashrc"
+
+			# Si la línea "/dev/cgroup/cpu/user" no se encuentra en el archivo .bashrc,
+			# quiere decir que el script no ha sido implementado en éste sistema
+			if [ $( cat ${BASHRC_F} | grep "/dev/cgroup/cpu/user" | wc -l ) == "0" ]; then
+
+				# Respaldamos el archivo .bashrc anterior en .bashrc.respaldo
+				echo "Respaldando ${BASHRC_F} en ${BASHRC_F}.respaldo"
+				[ ! -e ${BASHRC_F}.respaldo ] && cp ${BASHRC_F} ${BASHRC_F}.respaldo
+
+				echo "Parcheando ${BASHRC_F}"
+
+				# Éste bloque de código se agrega al archivo .bashrc y es parte de lo propuesto por 
+				# Lennart Poettering.
+				echo "if [ \"\$PS1\" ] ; then" >> ${BASHRC_F}
+				echo "mkdir -p -m 0700 /dev/cgroup/cpu/user/\$\$ > /dev/null 2>&1" >> ${BASHRC_F}
+				echo "echo \$\$ > /dev/cgroup/cpu/user/\$\$/tasks" >> ${BASHRC_F}
+				echo "echo \"1\" > /dev/cgroup/cpu/user/\$\$/notify_on_release" >> ${BASHRC_F}
+				echo "fi" >> ${BASHRC_F}
+
+				chown ${usuario_min}:${usuario_min} ${BASHRC_F}
+
+			else
+
+				# Si la línea "/dev/cgroup/cpu/user" se encuentra presente en el archivo
+				# .bashrc quiere decir que ya se aplicó el script. Se ignora.
+				ERROR "Parece que ya aplicaste el patch a ${BASHRC_F} con anterioridad. Ignorando."
+
+			fi
+
+			;;
+		esac
+	done
+
+	# Especificando donde está el archivo rc.local
+	RCLOCAL_F="/etc/rc.local"
+
+	# Si la línea "/dev/cgroup/cpu/release_agent" no se encuentra en el archivo rc.local,
+	# quiere decir que el script no ha sido implementado en éste sistema
+	if [ $( cat ${RCLOCAL_F} | grep "/dev/cgroup/cpu/release_agent" | wc -l ) == "0" ]; then
+
+		# Determinemos cuál es el número de línea del último comando "exit 0" dentro del archivo rc.local
+		INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
+
+		# Respaldamos el archivo rc.local en rc.local.respaldo
+		echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
+		[ ! -e ${RCLOCAL_F}.respaldo ] && cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
+
+echo "Parcheando ${RCLOCAL_F}"
+
+		# Insertamos éste bloque de código justo antes del último "exit 0" en un archivo temporal rc.local.nuevo
+		sed "${INSERTAR}imkdir -p /dev/cgroup/cpu\nmount -t cgroup cgroup /dev/cgroup/cpu -o cpu\nmkdir -m 0777 /dev/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /dev/cgroup/cpu/release_agent" /etc/rc.local >> "${RCLOCAL_F}.nuevo"
+
+		# Movemos el archivo temporal a su ubicación permanente
+		mv ${RCLOCAL_F}.nuevo ${RCLOCAL_F}
+
+		echo "Otorgando permisos de ejecución a ${RCLOCAL_F}"
+		chmod +x ${RCLOCAL_F}
+
+	else
+
+		# Si la línea "/dev/cgroup/cpu/release_agent" se encuentra presente en el archivo
+		# rc.local quiere decir que ya se aplicó el script. Se ignora.
+		ERROR "Parece que ya aplicaste el patch a ${RCLOCAL_F} con anterioridad. Ignorando."
+
+	fi
+
+	# Especificando donde está el archivo cgroup_clean
+	CGROUP_F="/usr/local/sbin/cgroup_clean"
+
+	echo "Creando ${CGROUP_F}"
+
+	# Insertamos el siguiente bloque de código en cgroup_clean
+	echo "#!/bin/sh" > ${CGROUP_F}
+	echo "if [ \"\$*\" != \"/user\" ]; then" >> ${CGROUP_F}
+	echo "rmdir /dev/cgroup/cpu/\$*" >> ${CGROUP_F}
+	echo "fi" >> ${CGROUP_F}
+
+	echo "Otorgando permisos de ejecución a ${CGROUP_F}"
+	chmod +x ${CGROUP_F}
+
+	#----- Fin del parche de Lennart Poettering ------------------------------------------------------------------#
+	#=============================================================================================================#
+
+	ADVERTENCIA "Removiendo scripts de inicio usualmente innecesarios"
+
+	for list in ${LIST}; do
+		if [ -n ${LAPTOP} ]; then
+			if [ ${list} != "bluetooth" ] || [ ${list} != "bluez-utils" ] || [ ${list} != "hibernate" ] || [ ${list} != "pcmciautils" ]; then
+				update-rc.d -f ${list} remove
+				rm -rf /etc/init.d/${list}
+			fi
+		else
+			update-rc.d -f ${list} remove
+			rm -rf /etc/init.d/${list}
+		fi
+	done
+
+	if [ -e /etc/default/avahi-daemon ]; then
+		ADVERTENCIA "Asegurando que avahi-daemon no inicie"
+		sed -i 's/AVAHI_DAEMON_DETECT_LOCAL=1/AVAHI_DAEMON_DETECT_LOCAL=0/g' /etc/default/avahi-daemon
+	fi
+
+	if [ -e /etc/default/rcS ]; then
+		ADVERTENCIA "Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile)"
+		[ -z $( grep "CONCURRENCY=makefile" /etc/default/rcS ) ] && echo 'CONCURRENCY=makefile' >> /etc/default/rcS
+	fi
+
+	if [ -e /etc/sysctl.conf ]; then
+		ADVERTENCIA "Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness)"
+		[ -z $( grep "vm.swappiness=10" /etc/sysctl.conf ) ] && echo 'vm.swappiness=10' >> /etc/sysctl.conf
+	fi
+
+	if [ -e /etc/default/prelink ]; then
+		ADVERTENCIA "Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink)"
+		echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados ..."
+		echo "Le recomendamos que se tome un buen café venezolano mientras espera."
+		sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/default/prelink
+		sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/default/prelink
+		/etc/cron.daily/prelink
+	fi
+
+	if [ -e /etc/inittab ];	then
+		ADVERTENCIA "Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad"
+		sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
+	fi
+
+	DESHABILITAR_FSTAB=1
+
+	if [ ${DESHABILITAR_FSTAB} == 0 ]; then
+
+	ADVERTENCIA "Añadiendo noatime a /etc/fstab"
+
+	if [ $( cat ${FSTAB} | grep "Optimizado para Canaima GNU/Linux" | wc -l ) == 0 ]; then
+		echo "#" >> ${FSTAB}
+		echo "# Optimizado para Canaima GNU/Linux (agregado noatime a las opciones de disco)" >> ${FSTAB}
+		echo "#" >> ${FSTAB}
+	fi
+
+	sed -i 's/   / /g' ${FSTAB}
+	sed -i 's/   / /g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
+	sed -i 's/, /,/g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
+	sed -i 's/  / /g' ${FSTAB}
+
+	for datos in $( cat ${FSTAB} | awk '{print $3"##--TOKEN--##"$2"##--TOKEN--##"$4"##--TOKEN--##"$1}' ); do
+
+		for fs in ext2 ext3 ext4 xfs ; do
+
+		if [ $( echo $( expr "$datos" : "$fs" ) ) == 4 ]; then
+
+		parsing=${datos#$fs##--TOKEN--##}
+		dispositivo=$( echo $parsing | sed 's/##--TOKEN--##/ /g' | awk '{print $1}' )
+		dispositivo=$( echo $dispositivo | sed 's/\//\\\//g' )
+		propiedad=$( echo $parsing | sed 's/##--TOKEN--##/ /g' | awk '{print $2}' )
+		uuid=$( echo $parsing | sed 's/##--TOKEN--##/ /g' | awk '{print $3}' )
+
+		case ${propiedad} in
+
+			"defaults")
+
+			if [ $dispositivo == "\/" ]; then
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
+			else
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime/g' ${FSTAB}
+			fi
+
+			;;
+
+			"errors=remount-ro,defaults")
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
+			;;
+
+			"defaults,errors=remount-ro")
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
+			;;
+
+			"errors=remount-ro")
+
+			if [ $dispositivo == "\/" ]; then
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
+			else
+				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' noatime,errors=remount-ro/g' ${FSTAB}
+			fi
+
+			;;
+
+		esac
+
+		fi
+
+		done
+
+	done
+
+	fi
+
 	;;
 
 	esac
