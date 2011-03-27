@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.0+32) unstable; urgency=low
+
+  * [b044449] Agregando preload prelink y deahadead ademas de soporte
+    para mas formatos de archivos
+
+ -- Carlos Guerrero <guerrerocarlos@gmail.com>  Sun, 27 Mar 2011 13:14:05 -0430
+
 canaima-escritorio-gnome (3.0+31) unstable; urgency=low
 
   [ Luis Alejandro Martínez Faneyth ]
