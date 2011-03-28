@@ -106,7 +106,7 @@ case ${1} in
 		/etc/cron.daily/prelink
 	fi
 
-	touch /.readahead
+	#touch /.readahead
 
 	#----- Inicio del parche de Lennart Poettering ---------------------------------------------------------------#
 	#=============================================================================================================#
@@ -300,25 +300,25 @@ EOF
 
 	done
 
-	if [ -d /var/lib/gconf/defaults/ ] && [ $(ls /var/lib/gconf/defaults/ | wc -l ) != 0 ]; then
+	#if [ -d /var/lib/gconf/defaults/ ] && [ $(ls /var/lib/gconf/defaults/ | wc -l ) != 0 ]; then
 
-	for gconf_limpiar in ${GCONF_LIST}; do
-	[ -e /var/lib/gconf/defaults/${gconf_limpiar} ] && mv /var/lib/gconf/defaults/${gconf_limpiar} /tmp/
-	done
+	#for gconf_limpiar in ${GCONF_LIST}; do
+	#[ -e /var/lib/gconf/defaults/${gconf_limpiar} ] && mv /var/lib/gconf/defaults/${gconf_limpiar} /tmp/
+	#done
 
-	rm -rf /var/lib/gconf/defaults/*
+	#rm -rf /var/lib/gconf/defaults/*
 
-	for gconf_limpiar in ${GCONF_LIST}; do
-	[ -e /tmp/${gconf_limpiar} ] && mv /tmp/${gconf_limpiar} /var/lib/gconf/defaults/
-	done
+	#for gconf_limpiar in ${GCONF_LIST}; do
+	#[ -e /tmp/${gconf_limpiar} ] && mv /tmp/${gconf_limpiar} /var/lib/gconf/defaults/
+	#done
 
-	fi
+	#fi
 
-	if [ -d /usr/share/libgweather/ ] && [ $(ls /usr/share/libgweather/ | wc -l ) != 0 ]; then
-	[ -e /usr/share/libgweather/Locations.es.xml.gz ] && mv /usr/share/libgweather/Locations.es.xml.gz /tmp/
-	rm -rf /usr/share/libgweather/*
-	[ -e /tmp/Locations.es.xml.gz ] && mv /tmp/Locations.es.xml.gz /usr/share/libgweather/
-	fi
+	#if [ -d /usr/share/libgweather/ ] && [ $(ls /usr/share/libgweather/ | wc -l ) != 0 ]; then
+	#[ -e /usr/share/libgweather/Locations.es.xml.gz ] && mv /usr/share/libgweather/Locations.es.xml.gz /tmp/
+	#rm -rf /usr/share/libgweather/*
+	#[ -e /tmp/Locations.es.xml.gz ] && mv /tmp/Locations.es.xml.gz /usr/share/libgweather/
+	#fi
 
 	# Para cada usuario en /home/ ...
 	for usuario in /home/*? ; do
