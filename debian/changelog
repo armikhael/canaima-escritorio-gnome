@@ -2,8 +2,10 @@ canaima-escritorio-gnome (3.0+34) unstable; urgency=low
 
   * [eb44f3a] Agregando parche de Lennart Poettering proveniente de
     canaima-base.
+  * [54f432a] Agregando parche de Lennart Poettering proveniente de
+    canaima-base.
 
- -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Sun, 27 Mar 2011 23:25:13 -0430
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Sun, 27 Mar 2011 23:25:59 -0430
 
 canaima-escritorio-gnome (3.0+33) unstable; urgency=low
 
