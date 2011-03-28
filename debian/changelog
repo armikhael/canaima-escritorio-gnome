@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+37) unstable; urgency=low
+
+  * [b75adc1] Corrigiendo error de sintaxis.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Mon, 28 Mar 2011 03:04:01 -0430
+
 canaima-escritorio-gnome (3.0+36) unstable; urgency=low
 
   * [0146912] Perfeccionando la validación de la remoción de los
