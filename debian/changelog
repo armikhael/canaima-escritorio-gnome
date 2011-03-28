@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.0+35) unstable; urgency=low
+
+  * [887ecb4] Agregando funcionalidad de toque en ratón táctil de
+    portátiles, reportado en el tique 163 del Trac
+
+ -- Joaquin Muñoz Lucavechi <lucavechi@gmail.com>  Mon, 28 Mar 2011 02:15:22 -0430
+
 canaima-escritorio-gnome (3.0+34) unstable; urgency=low
 
   * [eb44f3a] Agregando parche de Lennart Poettering proveniente de
