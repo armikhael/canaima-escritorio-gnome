@@ -50,6 +50,15 @@ fi
 case ${1} in
 
 	configure)
+		
+	# seccion agregada para configurar el toque del raton tactil solo en portatiles
+	# lun mar 28 01:50:47 VET 2011, huntingbears, joaquinm
+	if [ ${LAPTOP} == true ]; then
+		
+		[ ! -e /etc/modprobe.d/options.conf ] && touch /etc/modprobe.d/options.conf
+		echo "options psmouse proto=imps" >> /etc/modprobe.d/options.conf
+
+	fi
 
 	ADVERTENCIA "Corrigiendo bug del Network-Manager de Debian"
 	sed -i 's/managed=.*/managed=true/g' /etc/NetworkManager/NetworkManager.conf
