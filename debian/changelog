@@ -1,3 +1,11 @@
+canaima-escritorio-gnome (3.0+40) unstable; urgency=low
+
+  * [6ecd4ee] modificando el archivo control para añadir nuevos paquetes
+    para que funcione la escritura de algunos medios de almacenamineto
+    fuse-posixovl, ntfs-3g y ntfs
+
+ -- Carlos Escobar <carlosescobar70@gmail.com>  Thu, 31 Mar 2011 16:22:58 -0430
+
 canaima-escritorio-gnome (3.0+39) unstable; urgency=low
 
   * [c8d2fcf] modificando el archivo control para añadir nuevo paquete
