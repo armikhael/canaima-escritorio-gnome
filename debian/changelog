@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+39) unstable; urgency=low
+
+  * [c8d2fcf] modificando el archivo control para añadir nuevo paquete
+
+ -- Carlos Escobar <carlosescobar70@gmail.com>  Thu, 31 Mar 2011 08:53:35 -0430
+
 canaima-escritorio-gnome (3.0+38) unstable; urgency=low
 
   * [e3ec78c] Removiendo optimización de espacio.
