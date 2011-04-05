@@ -1,3 +1,18 @@
+canaima-escritorio-gnome (3.0+41) unstable; urgency=low
+
+  [ Jesús Lara (aka phenobarbital) ]
+  * [23903dc] rollback a incorporacion de paquetes erroneos como ntfs y
+    fuse-posixovl
+  * [eb0db49] Incorporados los paquetes necesarios para el automontaje y
+    gestion de FS en Gnome
+  * [9b60282] Incorporados los paquetes necesarios para el automontaje y
+    gestion de FS en Gnome y cambios en gnome-audio
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [0c887e9] Quitando dependencias a fuse-posixovl, ntfs-3g y ntfs.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Tue, 05 Apr 2011 15:07:50 -0430
+
 canaima-escritorio-gnome (3.0+40) unstable; urgency=low
 
   * [6ecd4ee] modificando el archivo control para añadir nuevos paquetes
