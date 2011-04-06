@@ -16,7 +16,8 @@
 # términos de la Licencia Pública General de GNU (versión 3).
 
 PKG="canaima-escritorio-gnome"
-GCONF_LIST="%gconf-tree-es.xml %gconf-tree-es_AR.xml %gconf-tree-es_ES.xml %gconf-tree-es_VE.xml"
+# Procedimiento para remover traducciones del gconf - REQUIERE INVESTIGACIÓN
+#GCONF_LIST="%gconf-tree-es.xml %gconf-tree-es_AR.xml %gconf-tree-es_ES.xml %gconf-tree-es_VE.xml"
 FSTAB="/etc/fstab"
 # Color Verde
 VERDE="\e[1;32m"
@@ -101,12 +102,11 @@ case ${1} in
 		ADVERTENCIA "Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink)"
 		echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados ..."
 		echo "Le recomendamos que se tome un buen café venezolano mientras espera."
-		sed -i 's/PRELINKING=unknown/PRELINKING=yes/g' /etc/default/prelink
-		sed -i 's/PRELINKING=no/PRELINKING=yes/g' /etc/default/prelink
+		sed -i 's/PRELINKING=.*/PRELINKING=yes/g' /etc/default/prelink
 		/etc/cron.daily/prelink
 	fi
 
-	#touch /.readahead
+	touch /.readahead_collector
 
 	#----- Inicio del parche de Lennart Poettering ---------------------------------------------------------------#
 	#=============================================================================================================#
@@ -300,6 +300,8 @@ EOF
 
 	done
 
+	# Procedimiento para remover traducciones del gconf - REQUIERE INVESTIGACIÓN
+	# -----------------------------------------------------------------------------------------------------
 	#if [ -d /var/lib/gconf/defaults/ ] && [ $(ls /var/lib/gconf/defaults/ | wc -l ) != 0 ]; then
 
 	#for gconf_limpiar in ${GCONF_LIST}; do
@@ -314,6 +316,8 @@ EOF
 
 	#fi
 
+	# Procedimiento para remover locaciones de libgweather - REQUIERE INVESTIGACIÓN
+	# -----------------------------------------------------------------------------------------------------
 	#if [ -d /usr/share/libgweather/ ] && [ $(ls /usr/share/libgweather/ | wc -l ) != 0 ]; then
 	#[ -e /usr/share/libgweather/Locations.es.xml.gz ] && mv /usr/share/libgweather/Locations.es.xml.gz /tmp/
 	#rm -rf /usr/share/libgweather/*
@@ -396,8 +400,7 @@ XDG_VIDEOS_DIR="\$HOME/Videos"
 
 EOF
 
-	chown ${usuario_min}:${usuario_min} ${usuario}/.config/user-dirs.dirs
-	chown ${usuario_min}:${usuario_min} ${usuario}/.config/user-dirs.locale
+	chown -R ${usuario_min}:${usuario_min} ${usuario}/.config
 
 	# Actualicemos la configuración
 	if [ -x $( which xdg-user-dirs-update ) ]; then
