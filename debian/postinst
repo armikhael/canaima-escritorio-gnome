@@ -110,104 +110,104 @@ case ${1} in
 
 	#----- Inicio del parche de Lennart Poettering ---------------------------------------------------------------#
 	#=============================================================================================================#
-	ADVERTENCIA "Parcheando el sistema con el script de Lennart Poettering"
 
-	# Para cada usuario en /home/ ...
-	for usuario in /home/*? ; do
+	# Verificamos que tenemos soporte para cgroups
+	if [ ! -z "$( cat /proc/filesystems | grep cgroup )" ]; then
 
-		# Obtenemos sólo el nombre del usuario
-		usuario_min=$(basename ${usuario})
+	# Montamos el fs cgroup y lo adjuntamos a /etc/fstab
+	if [ -x $( which mount ) ]; then
+		mount -t tmpfs tmpfs /sys/fs/cgroup
+	fi
 
-		# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
-		case $(grep "${usuario_min}:.*:.*:.*:.*:.*:::" /etc/shadow) in
+	if [ -z "$( grep "tmpfs /sys/fs/cgroup tmpfs defaults 0 0" /etc/fstab )" ]; then
+		# si no hemos montado los cgroups
+		echo "tmpfs /sys/fs/cgroup tmpfs defaults 0 0" >> /etc/fstab
+	fi
 
-			'')
-			# No hace nada si no se encuentra en /etc/shadow
-			;;
+	# Aplicamos la gestion de grupos por usuario a cada usuario activo del sistema
+	for usuario in $( grep "/home/" /etc/passwd | awk -F: '{print $1}' ) ; do
 
-			*)
+		userid=$( grep ${usuario} /etc/passwd | awk -F: '{print $3}' | bc -l )
+		# Verificamos si es un usuario valido para iniciar sesion
+		if [ ${userid} -gt 999 ]; then
 
 			# Especificamos cuál es el archivo .bashrc
-			BASHRC_F="/home/${usuario_min}/.bashrc"
+			BASHRC_U="/home/${usuario}/.bashrc"
 
-			# Si la línea "/dev/cgroup/cpu/user" no se encuentra en el archivo .bashrc,
-			# quiere decir que el script no ha sido implementado en éste sistema
-			if [ $( cat ${BASHRC_F} | grep "/dev/cgroup/cpu/user" | wc -l ) == "0" ]; then
+			if [ -f $BASHRC_U ]; then
+			# de existir el archivo bashrc
+				# Si la línea "/sys/fs/cgroup/cpu/user" no se encuentra en el archivo .bashrc,
+				# quiere decir que el script no ha sido implementado en éste sistema
+				if [ $( cat ${BASHRC_U} | grep "/sys/fs/cgroup/cpu/user" | wc -l ) == "0" ]; then
+					# Respaldamos el archivo .bashrc anterior en .bashrc.respaldo
+					echo "Respaldando ${BASHRC_U} en ${BASHRC_U}.respaldo"
+					[ ! -e ${BASHRC_U}.respaldo ] && cp ${BASHRC_U} ${BASHRC_U}.respaldo
 
-				# Respaldamos el archivo .bashrc anterior en .bashrc.respaldo
-				echo "Respaldando ${BASHRC_F} en ${BASHRC_F}.respaldo"
-				[ ! -e ${BASHRC_F}.respaldo ] && cp ${BASHRC_F} ${BASHRC_F}.respaldo
+					echo "Iniciando aplicacion parche de Lennart Poettering ${BASHRC_U}"
 
-				echo "Parcheando ${BASHRC_F}"
-
-				# Éste bloque de código se agrega al archivo .bashrc y es parte de lo propuesto por 
-				# Lennart Poettering.
-				echo "if [ \"\$PS1\" ] ; then" >> ${BASHRC_F}
-				echo "mkdir -p -m 0700 /dev/cgroup/cpu/user/\$\$ > /dev/null 2>&1" >> ${BASHRC_F}
-				echo "echo \$\$ > /dev/cgroup/cpu/user/\$\$/tasks" >> ${BASHRC_F}
-				echo "echo \"1\" > /dev/cgroup/cpu/user/\$\$/notify_on_release" >> ${BASHRC_F}
-				echo "fi" >> ${BASHRC_F}
-
-				chown ${usuario_min}:${usuario_min} ${BASHRC_F}
-
-			else
-
-				# Si la línea "/dev/cgroup/cpu/user" se encuentra presente en el archivo
-				# .bashrc quiere decir que ya se aplicó el script. Se ignora.
-				ERROR "Parece que ya aplicaste el patch a ${BASHRC_F} con anterioridad. Ignorando."
-
+					# Éste bloque de código se agrega al archivo .bashrc y es parte de lo propuesto por 
+					# Lennart Poettering.
+					echo "if [ \"\$PS1\" ] ; then" >> ${BASHRC_U}
+					echo "mkdir -p -m 0700 /sys/fs/cgroup/cpu/user/\$\$ > /dev/null 2>&1" >> ${BASHRC_U}
+					echo "echo \$\$ > /sys/fs/cgroup/cpu/user/\$\$/tasks" >> ${BASHRC_U}
+					echo "echo \"1\" > /sys/fs/cgroup/cpu/user/\$\$/notify_on_release" >> ${BASHRC_U}
+					echo "fi" >> ${BASHRC_U}
+					# el usuario debe ser propietario de su bashrc
+					chown ${usuario}:${usuario} ${BASHRC_U}
+				else
+					# Si la línea "/sys/fs/cgroup/cpu/user" se encuentra presente en el archivo
+					# .bashrc quiere decir que ya se aplicó el script. Se ignora.
+					ERROR "Parece que ya aplicaste el patch a ${BASHRC_U} con anterioridad. Ignorando."
+				fi		
 			fi
-
-			;;
-		esac
+		fi	
 	done
 
 	# Especificando donde está el archivo rc.local
 	RCLOCAL_F="/etc/rc.local"
+	# TODO: buscar una ubicacion que sea ejecutable en init 3 o superior
+		# Si la línea "/sys/fs/cgroup/cpu/release_agent" no se encuentra en el archivo rc.local,
+		# quiere decir que el script no ha sido implementado en éste sistema
+		if [ $( cat ${RCLOCAL_F} | grep -c "/sys/fs/cgroup/cpu/release_agent" ) == "0" ]; then
+			# Determinemos cuál es el número de línea del último comando "exit 0" dentro del archivo rc.local
+			INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
+		
+			# Respaldamos el archivo rc.local en rc.local.respaldo
+			echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
+			[ ! -e ${RCLOCAL_F}.respaldo ] && cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
 
-	# Si la línea "/dev/cgroup/cpu/release_agent" no se encuentra en el archivo rc.local,
-	# quiere decir que el script no ha sido implementado en éste sistema
-	if [ $( cat ${RCLOCAL_F} | grep "/dev/cgroup/cpu/release_agent" | wc -l ) == "0" ]; then
+			echo "Aplicando parche ${RCLOCAL_F}"
 
-		# Determinemos cuál es el número de línea del último comando "exit 0" dentro del archivo rc.local
-		INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
+			# Insertamos éste bloque de código justo antes del último "exit 0" en un archivo temporal rc.local.nuevo
+			sed "${INSERTAR}imkdir -p /sys/fs/cgroup/cpu\nmount -t cgroup cgroup /sys/fs/cgroup/cpu -o cpu\nmkdir -p -m 0777 /sys/fs/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /sys/fs/cgroup/cpu/release_agent" /etc/rc.local >> "${RCLOCAL_F}.nuevo"
+			# Movemos el archivo temporal a su ubicación permanente
+			mv ${RCLOCAL_F}.nuevo ${RCLOCAL_F}
 
-		# Respaldamos el archivo rc.local en rc.local.respaldo
-		echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
-		[ ! -e ${RCLOCAL_F}.respaldo ] && cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
-
-		echo "Parcheando ${RCLOCAL_F}"
-
-		# Insertamos éste bloque de código justo antes del último "exit 0" en un archivo temporal rc.local.nuevo
-		sed "${INSERTAR}imkdir -p /dev/cgroup/cpu\nmount -t cgroup cgroup /dev/cgroup/cpu -o cpu\nmkdir -p -m 0777 /dev/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /dev/cgroup/cpu/release_agent" /etc/rc.local >> "${RCLOCAL_F}.nuevo"
-
-		# Movemos el archivo temporal a su ubicación permanente
-		mv ${RCLOCAL_F}.nuevo ${RCLOCAL_F}
-
-		echo "Otorgando permisos de ejecución a ${RCLOCAL_F}"
-		chmod +x ${RCLOCAL_F}
-
-	else
-
-		# Si la línea "/dev/cgroup/cpu/release_agent" se encuentra presente en el archivo
-		# rc.local quiere decir que ya se aplicó el script. Se ignora.
-		ERROR "Parece que ya aplicaste el patch a ${RCLOCAL_F} con anterioridad. Ignorando."
-
-	fi
+			echo "Otorgando permisos de ejecución a ${RCLOCAL_F}"
+			chmod +x ${RCLOCAL_F}
+		else
+			# Si la línea "/sys/fs/cgroup/cpu/release_agent" se encuentra presente en el archivo
+			# rc.local quiere decir que ya se aplicó el script. Se ignora.
+			ERROR "Parece que ya aplicaste el patch a ${RCLOCAL_F} con anterioridad. Ignorando."
+		fi
 
 	# Especificando donde está el archivo cgroup_clean
 	CGROUP_F="/usr/local/sbin/cgroup_clean"
 
-	echo "Creando ${CGROUP_F}"
-
 	# Insertamos el siguiente bloque de código en cgroup_clean
-	echo "#!/bin/sh" > ${CGROUP_F}
-	echo "if [ \"\$*\" != \"/user\" ]; then" >> ${CGROUP_F}
-	echo "rmdir /dev/cgroup/cpu/\$*" >> ${CGROUP_F}
-	echo "fi" >> ${CGROUP_F}
+cat <<EOF >> $CGROUP_F
+#!/bin/sh
+if [ "$*" != "/user" ]; then
+rmdir /sys/fs/cgroup/cpu/$*
+fi
+EOF
+		echo "Otorgando permisos de ejecución a ${CGROUP_F}"
+		chmod +x ${CGROUP_F}
 
-	echo "Otorgando permisos de ejecución a ${CGROUP_F}"
-	chmod +x ${CGROUP_F}
+	else
+		ERROR "Parece que tu sistema no soporta CGROUPS, obviando aplicación del parche."
+
+	fi
 
 	#----- Fin del parche de Lennart Poettering ------------------------------------------------------------------#
 	#=============================================================================================================#
