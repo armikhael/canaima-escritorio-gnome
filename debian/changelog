@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+44) unstable; urgency=low
+
+  * [cb67368] Agregando modificaciones al Parche de Lennart Poettering.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 06 Apr 2011 16:08:08 -0430
+
 canaima-escritorio-gnome (3.0+43) unstable; urgency=low
 
   * [d404330] Agregando script de remoción del parche de Lennart
