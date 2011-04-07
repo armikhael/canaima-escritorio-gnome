@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+45) unstable; urgency=low
+
+  * [5c52fba] Agregando dependencia a xnest.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Thu, 07 Apr 2011 10:09:43 -0430
+
 canaima-escritorio-gnome (3.0+44) unstable; urgency=low
 
   * [cb67368] Agregando modificaciones al Parche de Lennart Poettering.
