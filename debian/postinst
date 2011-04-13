@@ -317,7 +317,10 @@ EOF
 	EXITO "modificando privilegios a usurios actuales nuevos grupos"
 	for usuario in /home/*? ; do
         	usuario_c=$(basename ${usuario})
-		usermod ${usuario_c} -a -G lp,lpadmin,netdev,powerdev
+		usermod ${usuario_c} -a -G lp
+		usermod ${usuario_c} -a -G lpadmin
+		usermod ${usuario_c} -a -G netdev
+		usermod ${usuario_c} -a -G powerdev
 	done
 		
 	# -----------------------------------------------------------------------------------------------------
