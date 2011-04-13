@@ -299,23 +299,22 @@ EOF
 		done
 
 	done
-	EXITO "modificar /etc/default/useradd,nuevos privilegios para nuevos usuarios"
+	EXITO "modificando /etc/default/useradd, nuevos privilegios para nuevos usuarios"
 	# Procedimiento para modificar /etc/default/useradd para la creacion de nuevos usurios con nuevos privilegios 
         # -----------------------------------------------------------------------------------------------------
 	G_GRUPOS="lp netdev lpadmin powerdev"
 	G_CONF="/etc/group"
-	i=0
+	j=0
 	for GRUPO in ${G_GRUPOS}
 	do
-		let i=$i+1
-		GID${i}=$( cat ${G_CONF} | grep -w ${GRUPO} | sed 's/:/ /g' | awk '{print $3}')
-		#echo ${GID}
+		GID[$j]=$(less ${G_CONF} | grep -w ${GRUPO} | sed 's/:/ /g' | awk '{print $3}')
+		let j=$j+1
 	done 
-	sed -i 's/# GROUP=.*/GROUP=100,${GID1},${GID2},${GID3},${GID4}/g' /etc/default/useradd
+	sed -i 's/# GROUP=.*/GROUP=100,${GID[0]},${GID[1]},${GID[2]},${GID[3]}/g' /etc/default/useradd
 
 	# Procedimiento para editar los grupos de usuarios activos
         # -----------------------------------------------------------------------------------------------------
-	EXITO "modificando privilegios a usurios actuales"
+	EXITO "modificando privilegios a usurios actuales nuevos grupos"
 	for usuario in /home/*? ; do
         	usuario_c=$(basename ${usuario})
 		usermod ${usuario_c} -a -G lp,lpadmin,netdev,powerdev
