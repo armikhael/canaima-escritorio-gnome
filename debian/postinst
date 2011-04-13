@@ -310,7 +310,7 @@ EOF
 		GID[$j]=$(less ${G_CONF} | grep -w ${GRUPO} | sed 's/:/ /g' | awk '{print $3}')
 		let j=$j+1
 	done 
-	sed -i 's/# GROUP=.*/GROUP=100,${GID[0]},${GID[1]},${GID[2]},${GID[3]}/g' /etc/default/useradd
+	sed -i 's/# GROUP=.*/GROUP=100',${GID[0]},${GID[1]},${GID[2]},${GID[3]}'/g' /etc/default/useradd
 
 	# Procedimiento para editar los grupos de usuarios activos
         # -----------------------------------------------------------------------------------------------------
