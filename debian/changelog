@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.0+47) unstable; urgency=low
+
+  * [7791a1f] resolviendo Tikquec 205 privilegios en nuevos grupos
+    /etc/group
+
+ -- Francisco Vasquez Guerrero <fvasquez@cnti.gob.ve>  Wed, 13 Apr 2011 13:32:29 -0430
+
 canaima-escritorio-gnome (3.0+46) unstable; urgency=low
 
   * [505d3a2] corrigiendo error de umount, que imposibilita generacion
