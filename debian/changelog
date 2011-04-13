@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+48) unstable; urgency=low
+
+  * [335b9bd] colocando comentarios
+
+ -- Francisco Vasquez Guerrero <fvasquez@cnti.gob.ve>  Wed, 13 Apr 2011 14:35:16 -0430
+
 canaima-escritorio-gnome (3.0+47) unstable; urgency=low
 
   * [7791a1f] resolviendo Tikquec 205 privilegios en nuevos grupos
