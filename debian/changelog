@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+49) unstable; urgency=low
+
+  * [d5cceba] corriegiendo errores de sintaxis
+
+ -- Francisco Vasquez Guerrero <fvasquez@cnti.gob.ve>  Wed, 13 Apr 2011 16:29:14 -0430
+
 canaima-escritorio-gnome (3.0+48) unstable; urgency=low
 
   * [335b9bd] colocando comentarios
