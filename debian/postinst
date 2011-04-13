@@ -300,6 +300,29 @@ EOF
 
 	done
 
+	# Procedimiento para modificar /etc/default/useradd para la creacion de nuevos usurios con nuevos privilegios 
+        # -----------------------------------------------------------------------------------------------------
+	G_GRUPOS="lp netdev lpadmin powerdev"
+	G_CONF="/etc/group"
+	i=0
+	for GRUPO in ${G_GRUPOS}
+	do
+		let i=$i+1
+		GID${i}=$( cat ${G_CONF} | grep -w ${GRUPO} | sed 's/:/ /g' | awk '{print $3}')
+		#echo ${GID}
+	done 
+	sed -i 's/# GROUP=.*/GROUP=100,${GID1},${GID2},${GID3},${GID4}/g' /etc/default/useradd
+
+	# Procedimiento para editar los grupos de usuarios activos
+        # -----------------------------------------------------------------------------------------------------
+	
+	for usuario in /home/*? ; do
+        	usuario_c=$(basename ${usuario})
+		usermod ${usuario_c} -a -G lp,lpadmin,netdev,powerdev
+	done
+		
+	# -----------------------------------------------------------------------------------------------------
+
 	# Procedimiento para remover traducciones del gconf - REQUIERE INVESTIGACIÓN
 	# -----------------------------------------------------------------------------------------------------
 	#if [ -d /var/lib/gconf/defaults/ ] && [ $(ls /var/lib/gconf/defaults/ | wc -l ) != 0 ]; then
