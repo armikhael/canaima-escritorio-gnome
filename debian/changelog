@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+50) unstable; urgency=low
+
+  * [084e307] corriegiendo sed, las variable
+
+ -- Francisco Vasquez Guerrero <fvasquez@cnti.gob.ve>  Wed, 13 Apr 2011 17:10:56 -0430
+
 canaima-escritorio-gnome (3.0+49) unstable; urgency=low
 
   * [d5cceba] corriegiendo errores de sintaxis
