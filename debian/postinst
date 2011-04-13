@@ -299,7 +299,7 @@ EOF
 		done
 
 	done
-
+	EXITO "modificar /etc/default/useradd,nuevos privilegios para nuevos usuarios"
 	# Procedimiento para modificar /etc/default/useradd para la creacion de nuevos usurios con nuevos privilegios 
         # -----------------------------------------------------------------------------------------------------
 	G_GRUPOS="lp netdev lpadmin powerdev"
@@ -315,7 +315,7 @@ EOF
 
 	# Procedimiento para editar los grupos de usuarios activos
         # -----------------------------------------------------------------------------------------------------
-	
+	EXITO "modificando privilegios a usurios actuales"
 	for usuario in /home/*? ; do
         	usuario_c=$(basename ${usuario})
 		usermod ${usuario_c} -a -G lp,lpadmin,netdev,powerdev
