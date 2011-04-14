@@ -3408,6 +3408,13 @@
       <run-in-terminal>false</run-in-terminal>
     </media-player>
     <media-player>
+      <name>Exaile Music Player</name>
+      <executable>exaile</executable>
+      <command>exaile</command>
+      <icon-name>exaile</icon-name>
+      <run-in-terminal>false</run-in-terminal>
+    </media-player>
+    <media-player>
       <name>Rhythmbox Music Player</name>
       <name xml:lang="af">Rhythmbox-musiekspeler</name>
       <name xml:lang="ar">مشغل الموسيقى أنغام</name>
