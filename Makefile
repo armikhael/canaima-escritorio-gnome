@@ -29,6 +29,7 @@ install:
 
 	mkdir -p $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 	cp -r pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	cp -r gnome-default-applications.xml $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 
 uninstall:
 

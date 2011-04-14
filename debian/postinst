@@ -61,6 +61,9 @@ case ${1} in
 
 	fi
 
+    #Proporcionando a cunaguaro y totem como posibles reproductores por defecto
+    cp /usr/share/canaima-escritorio-gnome/gnome-default-applications.xml /usr/share/gnome-control-center/default-apps/gnome-default-applications.xml
+
 	ADVERTENCIA "Corrigiendo bug del Network-Manager de Debian"
 	sed -i 's/managed=.*/managed=true/g' /etc/NetworkManager/NetworkManager.conf
 
