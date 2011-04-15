@@ -1,3 +1,15 @@
+canaima-escritorio-gnome (3.0+52) unstable; urgency=low
+
+  [ Carlos Guerrero ]
+  * [bd16d28] Agregando dependencias para funcionamiento correcto de
+    CUPS #191. Agregando cunaguaro y totem a aplicaciones preferidas
+  * [5fc56c7] Incluyendo Exaile
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [0224807] Deshabilitando algunos procesos experimentales.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 15 Apr 2011 01:18:25 -0430
+
 canaima-escritorio-gnome (3.0+51) unstable; urgency=low
 
   * [0716c1d] corriegiendo para usuarios actuales
