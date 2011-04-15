@@ -1,3 +1,16 @@
+canaima-escritorio-gnome (3.0+54) unstable; urgency=low
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [0224807] Deshabilitando algunos procesos experimentales.
+  * [2c28ea6] Nueva versión
+
+  [ Carlos Guerrero ]
+  * [cc17dbf] incluyendo paquete ppp para funcionamiento de modems 3g
+  * [0c0813a] Nueva versión
+  * [6f1d4cc] Bump
+
+ -- Carlos Guerrero <guerrerocarlos@gmail.com>  Fri, 15 Apr 2011 11:43:01 -0430
+
 canaima-escritorio-gnome (3.0+53) unstable; urgency=low
 
   * [cc17dbf] incluyendo paquete ppp para funcionamiento de modems 3g
