@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+53) unstable; urgency=low
+
+  * [cc17dbf] incluyendo paquete ppp para funcionamiento de modems 3g
+
+ -- Carlos Guerrero <guerrerocarlos@gmail.com>  Fri, 15 Apr 2011 11:34:35 -0430
+
 canaima-escritorio-gnome (3.0+52) unstable; urgency=low
 
   [ Carlos Guerrero ]
