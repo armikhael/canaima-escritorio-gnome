@@ -51,18 +51,19 @@ fi
 case ${1} in
 
 	configure)
-		
+	
+	# TODO: REQUIERE INVESTIGACIÓN	
 	# seccion agregada para configurar el toque del raton tactil solo en portatiles
 	# lun mar 28 01:50:47 VET 2011, huntingbears, joaquinm
-	if [ "${LAPTOP}" == "true" ]; then
-		
-		[ ! -e /etc/modprobe.d/options.conf ] && touch /etc/modprobe.d/options.conf
-		echo "options psmouse proto=imps" >> /etc/modprobe.d/options.conf
+	#if [ "${LAPTOP}" == "true" ]; then
+	#	
+	#	[ ! -e /etc/modprobe.d/options.conf ] && touch /etc/modprobe.d/options.conf
+	#	echo "options psmouse proto=imps" >> /etc/modprobe.d/options.conf
+	#
+	#fi
 
-	fi
-
-    #Proporcionando a cunaguaro y totem como posibles reproductores por defecto
-    cp /usr/share/canaima-escritorio-gnome/gnome-default-applications.xml /usr/share/gnome-control-center/default-apps/gnome-default-applications.xml
+	# TODO: Proporcionando a cunaguaro y totem como posibles reproductores por defecto - REQUIERE PULITURA
+	# cp /usr/share/canaima-escritorio-gnome/gnome-default-applications.xml /usr/share/gnome-control-center/default-apps/gnome-default-applications.xml
 
 	ADVERTENCIA "Corrigiendo bug del Network-Manager de Debian"
 	sed -i 's/managed=.*/managed=true/g' /etc/NetworkManager/NetworkManager.conf
@@ -117,10 +118,11 @@ case ${1} in
 	# Verificamos que tenemos soporte para cgroups
 	if [ ! -z "$( cat /proc/filesystems | grep cgroup )" ]; then
 
+	# TODO: CAUSA QUE LA CONSTRUCCIÓN DE LA ISO FALLE
 	# Montamos el fs cgroup y lo adjuntamos a /etc/fstab
-#	if [ -x $( which mount ) ]; then
-#		mount -t tmpfs tmpfs /sys/fs/cgroup
-#	fi
+	#if [ -x $( which mount ) ]; then
+	#	mount -t tmpfs tmpfs /sys/fs/cgroup
+	#fi
 
 	if [ -z "$( grep "tmpfs /sys/fs/cgroup tmpfs defaults 0 0" /etc/fstab )" ]; then
 		# si no hemos montado los cgroups
@@ -302,33 +304,35 @@ EOF
 		done
 
 	done
-	EXITO "modificando /etc/default/useradd, nuevos privilegios para nuevos usuarios"
+
+	# TODO: REQUIERE MAYOR DISCUSIÓN
+	#ADVERTENCIA "modificando /etc/default/useradd, nuevos privilegios para nuevos usuarios"
 	# Procedimiento para modificar /etc/default/useradd para la creacion de nuevos usurios con nuevos privilegios 
         # -----------------------------------------------------------------------------------------------------
-	G_GRUPOS="lp netdev lpadmin powerdev"
-	G_CONF="/etc/group"
-	j=0
-	for GRUPO in ${G_GRUPOS}
-	do
-		GID[$j]=$(less ${G_CONF} | grep -w ${GRUPO} | sed 's/:/ /g' | awk '{print $3}')
-		let j=$j+1
-	done 
-	sed -i 's/# GROUP=.*/GROUP=100',${GID[0]},${GID[1]},${GID[2]},${GID[3]}'/g' /etc/default/useradd
+	#G_GRUPOS="lp netdev lpadmin powerdev"
+	#G_CONF="/etc/group"
+	#j=0
+	#for GRUPO in ${G_GRUPOS}
+	#do
+	#	GID[$j]=$(less ${G_CONF} | grep -w ${GRUPO} | sed 's/:/ /g' | awk '{print $3}')
+	#	let j=$j+1
+	#done 
+	#sed -i 's/# GROUP=.*/GROUP=100',${GID[0]},${GID[1]},${GID[2]},${GID[3]}'/g' /etc/default/useradd
 
 	# Procedimiento para editar los grupos de usuarios activos
         # -----------------------------------------------------------------------------------------------------
-	EXITO "modificando privilegios a usurios actuales nuevos grupos"
-	for usuario in /home/*? ; do
-        	usuario_c=$(basename ${usuario})
-		usermod ${usuario_c} -a -G lp
-		usermod ${usuario_c} -a -G lpadmin
-		usermod ${usuario_c} -a -G netdev
-		usermod ${usuario_c} -a -G powerdev
-	done
+	#EXITO "modificando privilegios a usurios actuales nuevos grupos"
+	#for usuario in /home/*? ; do
+        #	usuario_c=$(basename ${usuario})
+	#	usermod ${usuario_c} -a -G lp
+	#	usermod ${usuario_c} -a -G lpadmin
+	#	usermod ${usuario_c} -a -G netdev
+	#	usermod ${usuario_c} -a -G powerdev
+	#done
 		
 	# -----------------------------------------------------------------------------------------------------
 
-	# Procedimiento para remover traducciones del gconf - REQUIERE INVESTIGACIÓN
+	# TODO: Procedimiento para remover traducciones del gconf - REQUIERE INVESTIGACIÓN
 	# -----------------------------------------------------------------------------------------------------
 	#if [ -d /var/lib/gconf/defaults/ ] && [ $(ls /var/lib/gconf/defaults/ | wc -l ) != 0 ]; then
 
@@ -344,7 +348,7 @@ EOF
 
 	#fi
 
-	# Procedimiento para remover locaciones de libgweather - REQUIERE INVESTIGACIÓN
+	# TODO: Procedimiento para remover locaciones de libgweather - REQUIERE INVESTIGACIÓN
 	# -----------------------------------------------------------------------------------------------------
 	#if [ -d /usr/share/libgweather/ ] && [ $(ls /usr/share/libgweather/ | wc -l ) != 0 ]; then
 	#[ -e /usr/share/libgweather/Locations.es.xml.gz ] && mv /usr/share/libgweather/Locations.es.xml.gz /tmp/
