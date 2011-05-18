@@ -1,3 +1,12 @@
+canaima-escritorio-gnome (3.0+56) unstable; urgency=low
+
+  * [9013c89] Merge branches 'master' and 'upstream' of
+    gitorious.org:canaima-gnu-linux/canaima-escritorio-gnome
+  * [77dedab] Agregando dependencia a apt-xapian-index para resolver el
+    bug de synaptic inhabilita la caja de texto Quick Search.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 18 May 2011 00:39:23 -0430
+
 canaima-escritorio-gnome (3.0+55) unstable; urgency=low
 
   * [4d9a893] Corrigiendo versión de desktop-base porque fallaba la
