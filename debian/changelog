@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+57) unstable; urgency=low
+
+  * [fa98174] Agregando recomandación de asistente-actualizacion
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Mon, 18 Jul 2011 12:13:48 -0430
+
 canaima-escritorio-gnome (3.0+56) unstable; urgency=low
 
   * [9013c89] Merge branches 'master' and 'upstream' of
