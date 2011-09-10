@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+59) unstable; urgency=low
+
+  * [a18caa0] Corrigiendo errores de lintian
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Sat, 10 Sep 2011 17:25:08 -0430
+
 canaima-escritorio-gnome (3.0+58) unstable; urgency=low
 
   * [f6cd0e7] Limpiando los scripts del mantenedor (cierra #365). Reestructurando las dependencias decididas en la Mini-Cayapa de Sabores (cierra #363). Removiendo archivo en desuso gnome-default-applications.xml.
