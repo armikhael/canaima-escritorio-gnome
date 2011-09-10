@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.0+58) unstable; urgency=low
+
+  * [f6cd0e7] Limpiando los scripts del mantenedor (cierra #365). Reestructurando las dependencias decididas en la Mini-Cayapa de Sabores (cierra #363). Removiendo archivo en desuso gnome-default-applications.xml.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Sat, 10 Sep 2011 17:05:33 -0430
+
 canaima-escritorio-gnome (3.0+57) unstable; urgency=low
 
   * [fa98174] Agregando recomandación de asistente-actualizacion
