@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-6) stable; urgency=low
+
+  * [14a22da] Agregando dependencia a canaima-notas-gnome.
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 28 Oct 2011 14:00:34 -0430
+
 canaima-escritorio-gnome (3.1-5) stable; urgency=low
 
   * [c63aa7a] Completando las dependencias
