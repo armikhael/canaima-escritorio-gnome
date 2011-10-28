@@ -16,9 +16,7 @@
 # términos de la Licencia Pública General de GNU (versión 3).
 
 PKG="canaima-escritorio-gnome"
-# Procedimiento para remover traducciones del gconf - REQUIERE INVESTIGACIÓN
-#GCONF_LIST="%gconf-tree-es.xml %gconf-tree-es_AR.xml %gconf-tree-es_ES.xml %gconf-tree-es_VE.xml"
-FSTAB="/etc/fstab"
+
 # Color Verde
 VERDE="\e[1;32m"
 # Color Rojo
@@ -42,28 +40,9 @@ function EXITO() {
 echo -e ${VERDE}${1}${FIN}
 }
 
-if [ -n "$(which laptop-detect)" ]; then
-	if laptop-detect >/dev/null; then
-		LAPTOP=true
-	fi
-fi
-
 case ${1} in
 
 	configure)
-	
-	# TODO: REQUIERE INVESTIGACIÓN	
-	# seccion agregada para configurar el toque del raton tactil solo en portatiles
-	# lun mar 28 01:50:47 VET 2011, huntingbears, joaquinm
-	#if [ "${LAPTOP}" == "true" ]; then
-	#	
-	#	[ ! -e /etc/modprobe.d/options.conf ] && touch /etc/modprobe.d/options.conf
-	#	echo "options psmouse proto=imps" >> /etc/modprobe.d/options.conf
-	#
-	#fi
-
-	# TODO: Proporcionando a cunaguaro y totem como posibles reproductores por defecto - REQUIERE PULITURA
-	# cp /usr/share/canaima-escritorio-gnome/gnome-default-applications.xml /usr/share/gnome-control-center/default-apps/gnome-default-applications.xml
 
 	ADVERTENCIA "Corrigiendo bug del Network-Manager de Debian"
 	sed -i 's/managed=.*/managed=true/g' /etc/NetworkManager/NetworkManager.conf
@@ -110,112 +89,25 @@ case ${1} in
 		/etc/cron.daily/prelink
 	fi
 
+	if [ -e /etc/default/rcS ]; then
+		ADVERTENCIA "Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile)"
+		[ -z $( grep "CONCURRENCY=makefile" /etc/default/rcS ) ] && echo 'CONCURRENCY=makefile' >> /etc/default/rcS
+	fi
+
+	if [ -e /etc/sysctl.conf ]; then
+		ADVERTENCIA "Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness)"
+		[ -z $( grep "vm.swappiness=10" /etc/sysctl.conf ) ] && echo 'vm.swappiness=10' >> /etc/sysctl.conf
+	fi
+
+	if [ -e /etc/inittab ]; then
+		ADVERTENCIA "Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad"
+		sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
+		sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
+	fi
+
 	touch /.readahead_collector
-
-	#----- Inicio del parche de Lennart Poettering ---------------------------------------------------------------#
-	#=============================================================================================================#
-
-	# Verificamos que tenemos soporte para cgroups
-	if [ ! -z "$( cat /proc/filesystems | grep cgroup )" ]; then
-
-	# TODO: CAUSA QUE LA CONSTRUCCIÓN DE LA ISO FALLE
-	# Montamos el fs cgroup y lo adjuntamos a /etc/fstab
-	#if [ -x $( which mount ) ]; then
-	#	mount -t tmpfs tmpfs /sys/fs/cgroup
-	#fi
-
-	if [ -z "$( grep "tmpfs /sys/fs/cgroup tmpfs defaults 0 0" /etc/fstab )" ]; then
-		# si no hemos montado los cgroups
-		echo "tmpfs /sys/fs/cgroup tmpfs defaults 0 0" >> /etc/fstab
-	fi
-
-	# Aplicamos la gestion de grupos por usuario a cada usuario activo del sistema
-	for usuario in $( grep "/home/" /etc/passwd | awk -F: '{print $1}' ) ; do
-
-		userid=$( grep ${usuario} /etc/passwd | awk -F: '{print $3}' | bc -l )
-		# Verificamos si es un usuario valido para iniciar sesion
-		if [ ${userid} -gt 999 ]; then
-
-			# Especificamos cuál es el archivo .bashrc
-			BASHRC_U="/home/${usuario}/.bashrc"
-
-			if [ -f $BASHRC_U ]; then
-			# de existir el archivo bashrc
-				# Si la línea "/sys/fs/cgroup/cpu/user" no se encuentra en el archivo .bashrc,
-				# quiere decir que el script no ha sido implementado en éste sistema
-				if [ $( cat ${BASHRC_U} | grep "/sys/fs/cgroup/cpu/user" | wc -l ) == "0" ]; then
-					# Respaldamos el archivo .bashrc anterior en .bashrc.respaldo
-					echo "Respaldando ${BASHRC_U} en ${BASHRC_U}.respaldo"
-					[ ! -e ${BASHRC_U}.respaldo ] && cp ${BASHRC_U} ${BASHRC_U}.respaldo
-
-					echo "Iniciando aplicacion parche de Lennart Poettering ${BASHRC_U}"
-
-					# Éste bloque de código se agrega al archivo .bashrc y es parte de lo propuesto por 
-					# Lennart Poettering.
-					echo "if [ \"\$PS1\" ] ; then" >> ${BASHRC_U}
-					echo "mkdir -p -m 0700 /sys/fs/cgroup/cpu/user/\$\$ > /dev/null 2>&1" >> ${BASHRC_U}
-					echo "echo \$\$ > /sys/fs/cgroup/cpu/user/\$\$/tasks" >> ${BASHRC_U}
-					echo "echo \"1\" > /sys/fs/cgroup/cpu/user/\$\$/notify_on_release" >> ${BASHRC_U}
-					echo "fi" >> ${BASHRC_U}
-					# el usuario debe ser propietario de su bashrc
-					chown ${usuario}:${usuario} ${BASHRC_U}
-				else
-					# Si la línea "/sys/fs/cgroup/cpu/user" se encuentra presente en el archivo
-					# .bashrc quiere decir que ya se aplicó el script. Se ignora.
-					ERROR "Parece que ya aplicaste el patch a ${BASHRC_U} con anterioridad. Ignorando."
-				fi		
-			fi
-		fi	
-	done
-
-	# Especificando donde está el archivo rc.local
-	RCLOCAL_F="/etc/rc.local"
-	# TODO: buscar una ubicacion que sea ejecutable en init 3 o superior
-		# Si la línea "/sys/fs/cgroup/cpu/release_agent" no se encuentra en el archivo rc.local,
-		# quiere decir que el script no ha sido implementado en éste sistema
-		if [ $( cat ${RCLOCAL_F} | grep -c "/sys/fs/cgroup/cpu/release_agent" ) == "0" ]; then
-			# Determinemos cuál es el número de línea del último comando "exit 0" dentro del archivo rc.local
-			INSERTAR=$( cat ${RCLOCAL_F} | grep -n "exit 0" | sort -nr | head -n 1 | awk -F: '{print $1}' )
-		
-			# Respaldamos el archivo rc.local en rc.local.respaldo
-			echo "Respaldando ${RCLOCAL_F} en ${RCLOCAL_F}.respaldo"
-			[ ! -e ${RCLOCAL_F}.respaldo ] && cp ${RCLOCAL_F} ${RCLOCAL_F}.respaldo
-
-			echo "Aplicando parche ${RCLOCAL_F}"
-
-			# Insertamos éste bloque de código justo antes del último "exit 0" en un archivo temporal rc.local.nuevo
-			sed "${INSERTAR}imkdir -p /sys/fs/cgroup/cpu\nmount -t cgroup cgroup /sys/fs/cgroup/cpu -o cpu\nmkdir -p -m 0777 /sys/fs/cgroup/cpu/user\necho \"/usr/local/sbin/cgroup_clean\" > /sys/fs/cgroup/cpu/release_agent" /etc/rc.local >> "${RCLOCAL_F}.nuevo"
-			# Movemos el archivo temporal a su ubicación permanente
-			mv ${RCLOCAL_F}.nuevo ${RCLOCAL_F}
-
-			echo "Otorgando permisos de ejecución a ${RCLOCAL_F}"
-			chmod +x ${RCLOCAL_F}
-		else
-			# Si la línea "/sys/fs/cgroup/cpu/release_agent" se encuentra presente en el archivo
-			# rc.local quiere decir que ya se aplicó el script. Se ignora.
-			ERROR "Parece que ya aplicaste el patch a ${RCLOCAL_F} con anterioridad. Ignorando."
-		fi
-
-	# Especificando donde está el archivo cgroup_clean
-	CGROUP_F="/usr/local/sbin/cgroup_clean"
-
-	# Insertamos el siguiente bloque de código en cgroup_clean
-cat <<EOF >> $CGROUP_F
-#!/bin/sh
-if [ "$*" != "/user" ]; then
-rmdir /sys/fs/cgroup/cpu/$*
-fi
-EOF
-		echo "Otorgando permisos de ejecución a ${CGROUP_F}"
-		chmod +x ${CGROUP_F}
-
-	else
-		ERROR "Parece que tu sistema no soporta CGROUPS, obviando aplicación del parche."
-
-	fi
-
-	#----- Fin del parche de Lennart Poettering ------------------------------------------------------------------#
-	#=============================================================================================================#
 
 
 cat <<EOF >/etc/xdg/user-dirs.defaults
@@ -237,125 +129,6 @@ VIDEOS=Videos
 #VIDEOS=Documents/Videos
 
 EOF
-
-	ADVERTENCIA "Añadiendo noatime a /etc/fstab"
-
-	if [ $( cat ${FSTAB} | grep -c "Optimizado para Canaima GNU/Linux" ) == 0 ]; then
-		echo "#" >> ${FSTAB}
-		echo "# Optimizado para Canaima GNU/Linux (agregado noatime a las opciones de disco)" >> ${FSTAB}
-		echo "#" >> ${FSTAB}
-	fi
-
-	sed -i 's/   / /g' ${FSTAB}
-	sed -i 's/   / /g' ${FSTAB}
-	sed -i 's/  / /g' ${FSTAB}
-	sed -i 's/  / /g' ${FSTAB}
-	sed -i 's/, /,/g' ${FSTAB}
-	sed -i 's/  / /g' ${FSTAB}
-	sed -i 's/  / /g' ${FSTAB}
-	sed -i 's/#.*//g' ${FSTAB}
-
-	for datos in $( cat ${FSTAB} | awk '{print $3"##--TOKEN--##"$2"##--TOKEN--##"$4"##--TOKEN--##"$1}' ); do
-
-		for fs in ext2 ext3 ext4 xfs ; do
-
-		if [ $( echo $( expr "$datos" : "$fs" ) ) == 4 ]; then
-
-		parsing=${datos#$fs##--TOKEN--##}
-		dispositivo=$( echo $parsing | sed 's/##--TOKEN--##/ /g' | awk '{print $1}' )
-		dispositivo=$( echo $dispositivo | sed 's/\//\\\//g' )
-		propiedad=$( echo $parsing | sed 's/##--TOKEN--##/ /g' | awk '{print $2}' )
-		uuid=$( echo $parsing | sed 's/##--TOKEN--##/ /g' | awk '{print $3}' | sed 's/\//\\\//g' )
-
-		case ${propiedad} in
-
-			"defaults")
-
-			if [ $dispositivo == "\/" ]; then
-				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-			else
-				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime/g' ${FSTAB}
-			fi
-
-			;;
-
-			"errors=remount-ro,defaults")
-				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-			;;
-
-			"defaults,errors=remount-ro")
-				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-			;;
-
-			"errors=remount-ro")
-
-			if [ $dispositivo == "\/" ]; then
-				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' defaults,noatime,errors=remount-ro/g' ${FSTAB}
-			else
-				sed -i 's/'${uuid}' '${dispositivo}' '${fs}' '${propiedad}'/'${uuid}' '${dispositivo}' '${fs}' noatime,errors=remount-ro/g' ${FSTAB}
-			fi
-
-			;;
-
-		esac
-
-		fi
-
-		done
-
-	done
-
-	# TODO: REQUIERE MAYOR DISCUSIÓN
-	#ADVERTENCIA "modificando /etc/default/useradd, nuevos privilegios para nuevos usuarios"
-	# Procedimiento para modificar /etc/default/useradd para la creacion de nuevos usurios con nuevos privilegios 
-        # -----------------------------------------------------------------------------------------------------
-	#G_GRUPOS="lp netdev lpadmin powerdev"
-	#G_CONF="/etc/group"
-	#j=0
-	#for GRUPO in ${G_GRUPOS}
-	#do
-	#	GID[$j]=$(less ${G_CONF} | grep -w ${GRUPO} | sed 's/:/ /g' | awk '{print $3}')
-	#	let j=$j+1
-	#done 
-	#sed -i 's/# GROUP=.*/GROUP=100',${GID[0]},${GID[1]},${GID[2]},${GID[3]}'/g' /etc/default/useradd
-
-	# Procedimiento para editar los grupos de usuarios activos
-        # -----------------------------------------------------------------------------------------------------
-	#EXITO "modificando privilegios a usurios actuales nuevos grupos"
-	#for usuario in /home/*? ; do
-        #	usuario_c=$(basename ${usuario})
-	#	usermod ${usuario_c} -a -G lp
-	#	usermod ${usuario_c} -a -G lpadmin
-	#	usermod ${usuario_c} -a -G netdev
-	#	usermod ${usuario_c} -a -G powerdev
-	#done
-		
-	# -----------------------------------------------------------------------------------------------------
-
-	# TODO: Procedimiento para remover traducciones del gconf - REQUIERE INVESTIGACIÓN
-	# -----------------------------------------------------------------------------------------------------
-	#if [ -d /var/lib/gconf/defaults/ ] && [ $(ls /var/lib/gconf/defaults/ | wc -l ) != 0 ]; then
-
-	#for gconf_limpiar in ${GCONF_LIST}; do
-	#[ -e /var/lib/gconf/defaults/${gconf_limpiar} ] && mv /var/lib/gconf/defaults/${gconf_limpiar} /tmp/
-	#done
-
-	#rm -rf /var/lib/gconf/defaults/*
-
-	#for gconf_limpiar in ${GCONF_LIST}; do
-	#[ -e /tmp/${gconf_limpiar} ] && mv /tmp/${gconf_limpiar} /var/lib/gconf/defaults/
-	#done
-
-	#fi
-
-	# TODO: Procedimiento para remover locaciones de libgweather - REQUIERE INVESTIGACIÓN
-	# -----------------------------------------------------------------------------------------------------
-	#if [ -d /usr/share/libgweather/ ] && [ $(ls /usr/share/libgweather/ | wc -l ) != 0 ]; then
-	#[ -e /usr/share/libgweather/Locations.es.xml.gz ] && mv /usr/share/libgweather/Locations.es.xml.gz /tmp/
-	#rm -rf /usr/share/libgweather/*
-	#[ -e /tmp/Locations.es.xml.gz ] && mv /tmp/Locations.es.xml.gz /usr/share/libgweather/
-	#fi
-
 	# Para cada usuario en /home/ ...
 	for usuario in /home/*? ; do
 
