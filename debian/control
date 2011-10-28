@@ -75,6 +75,7 @@ Depends:	canaima-estilo-visual-gnome (>= 3.1),
 		gcalctool,
 		nautilus-share,
 		synaptic,
+		gksu,
 		${shlibs:Depends},
 		${misc:Depends}
 Pre-Depends: canaima-escritorio-base (>= 3.1)
