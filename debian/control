@@ -1,10 +1,10 @@
 Source: canaima-escritorio-gnome
-Section: misc
+Section: gnome
 Priority: optional
 Maintainer: Equipo de Desarrollo de Canaima GNU/Linux <desarrolladores@canaima.softwarelibre.gob.ve>
 Uploaders: Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>
-Build-Depends: debhelper (>= 7.0.50~), cdbs
-Standards-Version: 3.9.1
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.9.2
 Homepage: http://canaima.softwarelibre.gob.ve/
 Vcs-Git: git://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome.git
 Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome/trees/master
@@ -76,5 +76,7 @@ Depends:	canaima-estilo-visual-gnome (>= 3.1),
 		nautilus-share,
 		synaptic
 Pre-Depends: canaima-escritorio-base (>= 3.1)
-Description: Archivos base de Canaima GNU/Linux
- Este paquete provee los archivos basicos para el funcionamiento de un sistema GNOME de Canaima GNU/Linux.
+Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
+ Este paquete provee los archivos basicos para el funcionamiento
+ de un sistema GNOME de Canaima GNU/Linux.
+
