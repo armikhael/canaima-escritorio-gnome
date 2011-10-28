@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-5) stable; urgency=low
+
+  * [c63aa7a] Completando las dependencias
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 28 Oct 2011 11:26:21 -0430
+
 canaima-escritorio-gnome (3.1-4) stable; urgency=low
 
   * [694e5f8] Eliminando dependencia a canaima-aplicaciones-extendidas
