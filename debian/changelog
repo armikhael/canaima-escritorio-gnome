@@ -1,4 +1,10 @@
-canaima-escritorio-gnome (3.0-59) unstable; urgency=low
+canaima-escritorio-gnome (3.1-1) stable; urgency=low
+
+  * Versión para Canaima Popular 3.1
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Sat, 10 Sep 2011 17:41:43 -0430
+
+canaima-escritorio-gnome (3.0+59) unstable; urgency=low
 
   * [a18caa0] Corrigiendo errores de lintian
 
