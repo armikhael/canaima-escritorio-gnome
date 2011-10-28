@@ -74,7 +74,9 @@ Depends:	canaima-estilo-visual-gnome (>= 3.1),
 		apt-xapian-index,
 		gcalctool,
 		nautilus-share,
-		synaptic
+		synaptic,
+		${shlibs:Depends},
+		${misc:Depends}
 Pre-Depends: canaima-escritorio-base (>= 3.1)
 Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
  Este paquete provee los archivos basicos para el funcionamiento
