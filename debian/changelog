@@ -2,8 +2,9 @@ canaima-escritorio-gnome (3.1-8) stable; urgency=low
 
   * [89e475a] Ajustando dependencias y scripts del mantenedor
   * [24530b1] Removiendo comentarios de debian/control
+  * [5e67da1] Removiendo pruebas a algunos scripts del mantenedor
 
- -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 23 Dec 2011 11:57:43 -0430
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 23 Dec 2011 12:12:02 -0430
 
 canaima-escritorio-gnome (3.1-7) stable; urgency=low
 
