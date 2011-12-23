@@ -14,6 +14,8 @@
 
 PKG="canaima-escritorio-gnome"
 
+BORRAR_LENGUAJES="af am an ang ar ara as ast az az_IR bal be be@latin bem bg bn bn_IN br bs byn ca ca@valencia ckb co crh cs csb currency cy da de de_AT dv dz el en_AU en@boldquot en_CA en_GB en_NZ en@quot en@shaw en_US@piglatin eo es_CL es_CO es_CR es_DO es_EC es_GT es_HN es_MX es_NI es_PA es_PE es_PR es_SV es_UY et et_EE eu fa fi fil fo fr frp fur fy ga gez gl gn gu gv ha haw he he_IL hi hr hu hy ia id ig io is it it_IT ja jv ka kk km kn ko kok ks ku ky l10n la lb lg li lo lt lv mai mg mi mk ml mn mr ms ms_MY mt my my_MM nb nb_NO nds ne nl nn no nso oc or pa pl ps  pt_PT qu rm ro ru ru_RU rw sc si sk sl so sq sr sr@ije sr@latin sr@Latn sv sw ta te tet tg th ti tig tk tl tr tr_TR tt ug uk uk_UA ur urd ur_PK uz uz@cyrillic ve vi wa wal wo xh yi yo zh zh_CN zh_HK zh_TW zu"
+
 # Color Verde
 VERDE="\e[1;32m"
 # Color Rojo
@@ -40,19 +42,32 @@ echo -e ${VERDE}${1}${FIN}
 case ${1} in
 
 	configure)
+
+	ADVERTENCIA "Respaldando /etc/default/prelink en /etc/default/prelink.respaldo ..."
+	[ -e /etc/default/prelink ] && mv /etc/default/prelink /etc/default/prelink.respaldo
+
+	ADVERTENCIA "Respaldando /etc/default/rcS en /etc/default/rcS.respaldo ..."
+	[ -e /etc/default/rcS ] && mv /etc/default/rcS /etc/default/rcS.respaldo
+
+	ADVERTENCIA "Respaldando /etc/sysctl.conf en /etc/sysctl.conf.respaldo ..."
+	[ -e /etc/sysctl.conf ] && mv /etc/sysctl.conf /etc/sysctl.conf.respaldo
+
+	ADVERTENCIA "Respaldando /etc/inittab en /etc/inittab.respaldo ..."
+	[ -e /etc/inittab ] && mv /etc/inittab /etc/inittab.respaldo
+
 	# ¿No existe la carpeta escritorio?
 	if [ ! -d /etc/skel/Escritorio ]; then
 		[ -h /etc/skel/Escritorio ] && rm -rf /etc/skel/Escritorio
 		[ -f /etc/skel/Escritorio ] && rm -rf /etc/skel/Escritorio
 		mkdir /etc/skel/Escritorio
-		ADVERTENCIA "Creando carpeta Escritorio en /etc/skel/"
+		ADVERTENCIA "Creando carpeta Escritorio en /etc/skel/ ..."
 	fi 
 	# ¿Existe un enlace simbólico llamado Desktop?
 	# ¿Y una carpeta llamada Escritorio?
 	if [ -h /etc/skel/Desktop ] && [ -d /etc/skel/Escritorio ]; then
 		# Borra el enlace simbólico
 		rm -rf /etc/skel/Desktop
-		ADVERTENCIA "Removiendo enlace de escritorio Desktop en /etc/skel/"
+		ADVERTENCIA "Removiendo enlace de escritorio Desktop en /etc/skel/ ..."
 	fi
 	# ¿Existe un enlace simbólico llamado Escritorio?
 	# ¿Y una carpeta llamada Desktop?
@@ -61,43 +76,49 @@ case ${1} in
 		rm -rf /etc/skel/Escritorio
 		# y renombra la carpeta a Escritorio
 		mv /etc/skel/Desktop /etc/skel/Escritorio
-		ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en /etc/skel/"
+		ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en /etc/skel/ ..."
 	fi
 	# ¿Existen dos directorios con el mismo propósito?
-        if [ -d /etc/skel/Escritorio ] && [ -d /etc/skel/Desktop ]; then
+	if [ -d /etc/skel/Escritorio ] && [ -d /etc/skel/Desktop ]; then
 		# Mueve el contenido de Desktop a Escritorio
-        if [ $( ls -lah /etc/skel/Desktop | wc -l ) -gt 3 ]; then
+	if [ $( ls -lah /etc/skel/Desktop | wc -l ) -gt 0 ]; then
     		mv /etc/skel/Desktop/* /etc/skel/Escritorio/
-        fi
+	fi
 		# Borra la carpeta Desktop
 		rm -rf /etc/skel/Desktop
-		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en /etc/skel/"
+		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en /etc/skel/ ..."
 	fi
 
+	ADVERTENCIA "Borrando traducciones innecesarias ..."
+	for lenguaje in ${BORRAR_LENGUAJES}; do
+		rm -rf /usr/share/locale/${lenguaje}
+	done
+
+
 	if [ -e /etc/default/prelink ]; then
-		ADVERTENCIA "Pre-enlazando librerías para mejorar la eficiencia de Canaima (prelink)"
-		echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados ..."
+		ADVERTENCIA "Pre-enlazando librerías (prelink) ..."
+		echo "Éste proceso tomará un poco de tiempo dependiendo de la cantidad de programas instalados."
 		echo "Le recomendamos que se tome un buen café venezolano mientras espera."
 		sed -i 's/PRELINKING=.*/PRELINKING=yes/g' /etc/default/prelink
 		/etc/cron.daily/prelink
 	fi
 
 	if [ -e /etc/default/rcS ]; then
-		ADVERTENCIA "Cambiando la forma de carga de las dependencias iniciales del sistema (CONCURRENCY=makefile)"
+		ADVERTENCIA "Cambiando el orden de carga de los procesos iniciales (CONCURRENCY=makefile) ..."
 		[ -z $( grep "CONCURRENCY=makefile" /etc/default/rcS ) ] && echo 'CONCURRENCY=makefile' >> /etc/default/rcS
 	fi
 
 	if [ -e /etc/sysctl.conf ]; then
-		ADVERTENCIA "Reduciendo la cantidad de procesos que se swapean, la RAM es más rápida (vm.swappiness)"
+		ADVERTENCIA "Reduciendo la cantidad de procesos que utilizan la memoria swap (vm.swappiness) ..."
 		[ -z $( grep "vm.swappiness=10" /etc/sysctl.conf ) ] && echo 'vm.swappiness=10' >> /etc/sysctl.conf
 	fi
 
 	if [ -e /etc/inittab ]; then
-		ADVERTENCIA "Reduciendo cantidad de TTY'S a 2, el usuario no las usa todas en realidad"
-		sed -i 's/3:23:respawn:\/sbin\/getty/#3:23:respawn:\/sbin\/getty/g' /etc/inittab
-		sed -i 's/4:23:respawn:\/sbin\/getty/#4:23:respawn:\/sbin\/getty/g' /etc/inittab
-		sed -i 's/5:23:respawn:\/sbin\/getty/#5:23:respawn:\/sbin\/getty/g' /etc/inittab
-		sed -i 's/6:23:respawn:\/sbin\/getty/#6:23:respawn:\/sbin\/getty/g' /etc/inittab
+		ADVERTENCIA "Reduciendo la cantidad de terminales disponibles (inittab) ..."
+		sed -i 's|3:23:respawn:/sbin/getty|#3:23:respawn:/sbin/getty|g' /etc/inittab
+		sed -i 's|4:23:respawn:/sbin/getty|#4:23:respawn:/sbin/getty|g' /etc/inittab
+		sed -i 's|5:23:respawn:/sbin/getty|#5:23:respawn:/sbin/getty|g' /etc/inittab
+		sed -i 's|6:23:respawn:/sbin/getty|#6:23:respawn:/sbin/getty|g' /etc/inittab
 	fi
 
 	touch /.readahead_collector
@@ -122,64 +143,113 @@ VIDEOS=Videos
 
 EOF
 
+ADVERTENCIA "Escribiendo nuevos valores en /etc/locale.nopurge ..."
+cat <<EOF >/etc/locale.nopurge
+####################################################
+# This is the configuration file for localepurge(8).
+####################################################
+
+####################################################
+# Uncommenting this string enables removal of localized
+# man pages based on the configuration information for
+# locale files defined below:
+
+MANDELETE
+
+####################################################
+# Uncommenting this string causes localepurge to simply delete
+# locales which have newly appeared on the system without
+# bothering you about it:
+
+DONTBOTHERNEWLOCALE
+
+####################################################
+# Uncommenting this string enables display of freed disk
+# space if localepurge has purged any superfluous data:
+
+#SHOWFREEDSPACE
+
+#####################################################
+# Commenting out this string enables faster but less
+# accurate calculation of freed disk space:
+
+QUICKNDIRTYCALC
+
+#####################################################
+# Commenting out this string disables verbose output:
+
+#VERBOSE
+
+#####################################################
+# Following locales won't be deleted from this system
+# after package installations done with apt-get(8):
+
+es
+es_ES.UTF-8
+es_VE
+es_VE.UTF-8
+
+EOF
+
+	ADVERTENCIA "Reconfigurando localepurge ..."
+	export DEBIAN_FRONTEND="noninteractive"
+	dpkg-reconfigure -fnoninteractive localepurge
+
 	# Para cada usuario en /home/ ...
-	for usuario in /home/*? ; do
+	for HOME_U in /home/*?; do
 
-	# Obteniendo sólo el nombre del usuario
-	usuario_min=$(basename ${usuario})
+		# Obteniendo sólo el nombre del usuario
+		USUARIO=$( basename ${HOME_U} )
 
-	# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
-	case $( grep "${usuario_min}:.*:.*:.*:.*:.*:::" /etc/shadow ) in
+		# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+		if [ $( grep -c "${HOME_U}:.*:.*:.*:.*:.*:::" /etc/shadow ) == 1 ] \
+		&& [ $( grep -c "${HOME_U}:.*:.*:.*:.*:.*:/bin/.*sh" /etc/passwd ) == 1 ] \
+		&& [ -d ${HOME_U}/.config ] \
+		&& [ -d ${HOME_U} ]; then
 
-	'')
-	# No hace nada si no se encuentra en /etc/shadow
-	;;
+			# ¿No existe la carpeta Escritorio?
+			if [ ! -d ${HOME_U}/Escritorio ]; then
+				[ -h ${HOME_U}/Escritorio ] && rm -rf ${HOME_U}/Escritorio
+				[ -f ${HOME_U}/Escritorio ] && rm -rf ${HOME_U}/Escritorio
+				mkdir ${HOME_U}/Escritorio
+				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
+				ADVERTENCIA "Creando carpeta Escritorio en ${HOME_U} ..."
+			fi
+			# ¿Existe un enlace simbólico llamado Desktop?
+			# ¿Y una carpeta llamada Escritorio?
+			if [ -h ${HOME_U}/Desktop ] && [ -d ${HOME_U}/Escritorio ]; then
+				# Borra el enlace simbólico
+				rm -f ${HOME_U}/Desktop
+				ADVERTENCIA "Removiendo enlace de escritorio Desktop en ${HOME_U} ..."
+			fi
+			# ¿Existe un enlace simbólico llamado Escritorio?
+			# ¿Y una carpeta llamada Desktop?
+			if [ -h ${HOME_U}/Escritorio ] && [ -d ${HOME_U}/Desktop ]; then
+				# Borra el enlace simbólico
+				rm -f ${HOME_U}/Escritorio
+				# y renombra la carpeta a Escritorio
+				mv ${HOME_U}/Desktop ${HOME_U}/Escritorio
+				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
+				ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en ${HOME_U} ..."
+			fi
+			# ¿Existen dos directorios con el mismo propósito?
+			if [ -d ${HOME_U}/Escritorio ] && [ -d ${HOME_U}/Desktop ]; then
+				# Mueve el contenido de Desktop a Escritorio
+			if [ $( ls -lah ${HOME_U}/Desktop | wc  -l ) -gt 0 ]; then
+		    		mv ${HOME_U}/Desktop/* ${HOME_U}/Escritorio/
+			fi
+				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
+				# Borra la carpeta Desktop
+				rm -rf ${HOME_U}/Desktop
+				ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en ${HOME_U} ..."
+			fi
 
-	*)
+			# Configuremos XDG para que use como locale "es_VE" y
+			# Escritorio como carpeta de usuario predeterminada
 
-        # ¿No existe la carpeta Escritorio?
-        if [ ! -d ${usuario}/Escritorio ]; then
-		[ -h ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
-		[ -f ${usuario}/Escritorio ] && rm -rf ${usuario}/Escritorio
-                mkdir ${usuario}/Escritorio
-		chown -R ${usuario_min}:${usuario_min} ${usuario}/Escritorio
-                ADVERTENCIA "Creando carpeta Escritorio en ${usuario}"
-        fi
-	# ¿Existe un enlace simbólico llamado Desktop?
-	# ¿Y una carpeta llamada Escritorio?
-	if [ -h ${usuario}/Desktop ] && [ -d ${usuario}/Escritorio ]; then
-		# Borra el enlace simbólico
-		rm -f ${usuario}/Desktop
-		ADVERTENCIA "Removiendo enlace de escritorio Desktop en ${usuario}"
-	fi
-	# ¿Existe un enlace simbólico llamado Escritorio?
-	# ¿Y una carpeta llamada Desktop?
-	if [ -h ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
-		# Borra el enlace simbólico
-		rm -f ${usuario}/Escritorio
-		# y renombra la carpeta a Escritorio
-		mv ${usuario}/Desktop ${usuario}/Escritorio
-		chown -R ${usuario_min}:${usuario_min} ${usuario}/Escritorio
-		ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en ${usuario}"
-	fi
-	# ¿Existen dos directorios con el mismo propósito?
-        if [ -d ${usuario}/Escritorio ] && [ -d ${usuario}/Desktop ]; then
-		# Mueve el contenido de Desktop a Escritorio
-        if [ $( ls -lah ${usuario}/Desktop | wc  -l ) -gt 3 ]; then
-    		mv ${usuario}/Desktop/* ${usuario}/Escritorio/
-        fi
-		chown -R ${usuario_min}:${usuario_min} ${usuario}/Escritorio
-		# Borra la carpeta Desktop
-		rm -rf ${usuario}/Desktop
-		ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en ${usuario}"
-	fi
+			echo "es_VE" > ${HOME_U}/.config/user-dirs.locale
 
-	# Configuremos XDG para que use como locale "es_VE" y
-	# Escritorio como carpeta de usuario predeterminada
-
-	echo "es_VE" > ${usuario}/.config/user-dirs.locale
-
-cat <<EOF >${usuario}/.config/user-dirs.dirs
+cat <<EOF >${HOME_U}/.config/user-dirs.dirs
 # This file is written by xdg-user-dirs-update
 # If you want to change or add directories, just edit the line you're
 # interested in. All local changes will be retained on the next run
@@ -198,18 +268,17 @@ XDG_VIDEOS_DIR="\$HOME/Videos"
 
 EOF
 
-	chown -R ${usuario_min}:${usuario_min} ${usuario}/.config
+			chown -R ${HOME_U}:${HOME_U} ${HOME_U}/.config
 
-	# Actualicemos la configuración
-	if [ -x $( which xdg-user-dirs-update ) ]; then
-		su ${usuario_min} --command "xdg-user-dirs-update"
-		su ${usuario_min} --command "xdg-user-dirs-update --force"
-		EXITO "Carpetas de usuario actualizadas para '"${usuario_min}"'"
-	fi
+			# Actualicemos la configuración
+			if [ -x "$( which xdg-user-dirs-update )" ]; then
+				su ${HOME_U} --command "xdg-user-dirs-update"
+				su ${HOME_U} --command "xdg-user-dirs-update --force"
+				EXITO "Carpetas de usuario actualizadas para '"${HOME_U}"'"
+			fi
 	
-	;;
+		fi
 
-	esac
 	done
 
 	;;

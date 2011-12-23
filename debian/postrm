@@ -19,6 +19,19 @@ PKG="canaima-escritorio-gnome"
 case ${1} in
 
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+
+	ADVERTENCIA "Restaurando antiguo /etc/default/prelink.respaldo"
+	[ -e /etc/default/prelink.respaldo ] && mv /etc/default/prelink.respaldo /etc/default/prelink
+
+	ADVERTENCIA "Restaurando antiguo /etc/default/rcS.respaldo ..."
+	[ -e /etc/default/rcS.respaldo ] && mv /etc/default/rcS.respaldo /etc/default/rcS
+
+	ADVERTENCIA "Restaurando antiguo /etc/sysctl.conf.respaldo ..."
+	[ -e /etc/sysctl.conf.respaldo ] && mv /etc/sysctl.conf.respaldo /etc/sysctl.conf
+
+	ADVERTENCIA "Restaurando antiguo /etc/inittab.respaldo ..."
+	[ -e /etc/inittab.respaldo ] && mv /etc/inittab.respaldo /etc/inittab
+
 	;;
 
 	*)
