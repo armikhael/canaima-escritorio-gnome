@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-9) stable; urgency=low
+
+  * [79b999d] Removiendo Dependencia que ya está como Pre-Dependencia
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Fri, 23 Dec 2011 12:14:18 -0430
+
 canaima-escritorio-gnome (3.1-8) stable; urgency=low
 
   * [89e475a] Ajustando dependencias y scripts del mantenedor
