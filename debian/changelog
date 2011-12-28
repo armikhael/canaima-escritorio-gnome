@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-12) stable; urgency=low
+
+  * [d171af2] Actualizando pascua.jpg
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 28 Dec 2011 14:46:43 -0430
+
 canaima-escritorio-gnome (3.1-11) stable; urgency=low
 
   * [c0149f1] Ajustando dependencias
