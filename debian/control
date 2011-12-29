@@ -95,8 +95,8 @@ Recommends:	amigu (>= 0.7.2),
 		canaima-web-gnome (>= 3.1),
 		canaima-multimedia-gnome (>= 3.1),
 		canaima-accesibilidad-minimo (>= 3.1)
-Conflicts: gnome-core (<< 3)
-Replaces: gnome-core (<< 3)
+Conflicts: gnome-core (<< 1:3)
+Replaces: gnome-core (<< 1:3)
 Provides: gnome-core
 Pre-Depends: canaima-escritorio-base (>= 3.1), prelink, preload, readahead, localepurge, xdg-user-dirs-gtk, xdg-user-dirs, xdg-utils
 Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
