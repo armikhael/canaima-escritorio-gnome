@@ -44,16 +44,16 @@ case ${1} in
 	configure)
 
 	ADVERTENCIA "Respaldando /etc/default/prelink en /etc/default/prelink.respaldo ..."
-	[ -e /etc/default/prelink ] && mv /etc/default/prelink /etc/default/prelink.respaldo
+	[ -e /etc/default/prelink ] && cp /etc/default/prelink /etc/default/prelink.respaldo
 
 	ADVERTENCIA "Respaldando /etc/default/rcS en /etc/default/rcS.respaldo ..."
-	[ -e /etc/default/rcS ] && mv /etc/default/rcS /etc/default/rcS.respaldo
+	[ -e /etc/default/rcS ] && cp /etc/default/rcS /etc/default/rcS.respaldo
 
 	ADVERTENCIA "Respaldando /etc/sysctl.conf en /etc/sysctl.conf.respaldo ..."
-	[ -e /etc/sysctl.conf ] && mv /etc/sysctl.conf /etc/sysctl.conf.respaldo
+	[ -e /etc/sysctl.conf ] && cp /etc/sysctl.conf /etc/sysctl.conf.respaldo
 
 	ADVERTENCIA "Respaldando /etc/inittab en /etc/inittab.respaldo ..."
-	[ -e /etc/inittab ] && mv /etc/inittab /etc/inittab.respaldo
+	[ -e /etc/inittab ] && cp /etc/inittab /etc/inittab.respaldo
 
 	# ¿No existe la carpeta escritorio?
 	if [ ! -d /etc/skel/Escritorio ]; then
