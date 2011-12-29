@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.1-15) stable; urgency=low
+
+  * [d2ca31d] Agregando paquetes transicionales para facilitar la
+    migración de Canaima 3.0 -> Canaima 3.1
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 28 Dec 2011 22:51:55 -0430
+
 canaima-escritorio-gnome (3.1-14) stable; urgency=low
 
   * [0cf2632] Ajustando versiones de las dependencias
