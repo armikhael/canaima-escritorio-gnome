@@ -78,6 +78,7 @@ Depends:	canaima-estilo-visual-gnome (>= 3.1),
 		gksu,
 		menu,
 		bash-completion,
+		canaima-escritorio-base (>= 3.1),
 		${shlibs:Depends},
 		${misc:Depends}
 Recommends:	amigu (>= 0.7.2),
@@ -92,7 +93,7 @@ Recommends:	amigu (>= 0.7.2),
 Conflicts: gnome-core (<< 1:3)
 Replaces: gnome-core (<< 1:3)
 Provides: gnome-core
-Pre-Depends: canaima-acerca-gnome (>= 3.1), python-pyorbit, python-gnome2, prelink, preload, readahead, localepurge, xdg-user-dirs-gtk, xdg-user-dirs, xdg-utils, canaima-escritorio-base (>= 3.1)
+Pre-Depends: canaima-acerca-gnome (>= 3.1), python-pyorbit, python-gnome2, prelink, preload, readahead, localepurge, xdg-user-dirs-gtk, xdg-user-dirs, xdg-utils
 Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
  Este paquete provee los archivos basicos para el funcionamiento
  de un sistema GNOME de Canaima GNU/Linux.
