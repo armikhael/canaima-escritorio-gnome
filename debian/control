@@ -95,7 +95,18 @@ Recommends:	amigu (>= 0.7.2),
 		canaima-web-gnome (>= 3.1),
 		canaima-multimedia-gnome (>= 3.1),
 		canaima-accesibilidad-minimo (>= 3.1)
+Conflicts: gnome-core (<< 3)
+Replaces: gnome-core (<< 3)
+Provides: gnome-core
 Pre-Depends: canaima-escritorio-base (>= 3.1), prelink, preload, readahead, localepurge, xdg-user-dirs-gtk, xdg-user-dirs, xdg-utils
 Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
  Este paquete provee los archivos basicos para el funcionamiento
  de un sistema GNOME de Canaima GNU/Linux.
+
+Package: gnome-core
+Architecture: all
+Depends: canaima-escritorio-gnome (>= 3.1), ${shlibs:Depends}, ${misc:Depends}
+Description: Paquete transicional gnome-core -> canaima-escritorio-gnome
+ Esto es un paquete transicional para que los usuarios puedan 
+ actualizar de gnome-core a canaima-escritorio-gnome sin muchos
+ problemas. Puede ser removido.
