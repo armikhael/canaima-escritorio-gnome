@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-17) stable; urgency=low
+
+  * [88e4616] Remviendo dependencia a nautilus-share
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Thu, 29 Dec 2011 01:11:55 -0430
+
 canaima-escritorio-gnome (3.1-16) stable; urgency=low
 
   * [ed0e711] Corrigiendo versionamiento del Conflicts con gnome-core
