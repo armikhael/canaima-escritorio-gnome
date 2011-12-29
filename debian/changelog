@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.1-20) stable; urgency=low
+
+  * [aac5700] Agregando pre-dependencias para arreglar la producción de
+    la ISO
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Thu, 29 Dec 2011 13:36:46 -0430
+
 canaima-escritorio-gnome (3.1-19) stable; urgency=low
 
   * [94afce1] Removiendo dependencias
