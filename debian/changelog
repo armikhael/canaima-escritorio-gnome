@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-16) stable; urgency=low
+
+  * [ed0e711] Corrigiendo versionamiento del Conflicts con gnome-core
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 28 Dec 2011 23:50:39 -0430
+
 canaima-escritorio-gnome (3.1-15) stable; urgency=low
 
   * [d2ca31d] Agregando paquetes transicionales para facilitar la
