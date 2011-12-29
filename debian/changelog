@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-22) stable; urgency=low
+
+  * [7cfdc0f] Agregando canaima-acerca-gnome a pre-dependencias
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Thu, 29 Dec 2011 15:54:20 -0430
+
 canaima-escritorio-gnome (3.1-21) stable; urgency=low
 
   * [1c42e4d] Ajustando dependencias
