@@ -27,10 +27,16 @@ install:
 
 	mkdir -p $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 	cp -r pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	mkdir -p $(DESTDIR)/etc/xdg/autostart/
+	cp -r desktop/libcanberra-login-sound.desktop $(DESTDIR)/etc/xdg/autostart/
+	mkdir -p $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
+	cp -r sounds/desktop-login.oga $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
 
 uninstall:
 
 	rm -rf $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	rm -rf $(DESTDIR)/etc/xdg/autostart/
+	rm -rf $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
 
 clean:
 
