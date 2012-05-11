@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-25) stable; urgency=low
+
+  * [7f69b75] eliminado el paquete rar
+
+ -- Sasha Veronica Solano Grosjean <sashasolano@gmail.com>  Fri, 11 May 2012 15:32:52 -0430
+
 canaima-escritorio-gnome (3.1-24) stable; urgency=low
 
   * [61c3613] nuevas dependencia para activar sonido al iniciar la
