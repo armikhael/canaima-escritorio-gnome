@@ -2,22 +2,19 @@
 
 SHELL := sh -e
 
-SCRIPTS  =	"debian/postinst configure" \
-		"debian/postrm remove" \
+SCRIPTS = debian/postinst debian/postrm
 
 all: build
 
 test:
 
-	@echo -n "\n===== Comprobando posibles errores de sintaxis en los scripts de mantenedor =====\n"
-
-	@for SCRIPT in $(SCRIPTS); \
-	do \
-		echo -n "$${SCRIPT}\n"; \
-		bash -n $${SCRIPT}; \
+	@printf "Comprobando sintaxis de los scripts de shell ["
+	@for SCRIPT in $(SCRIPTS); do \
+		sh -n $${SCRIPT}; \
+		checkbashisms -f -x $${SCRIPT} || true; \
+		printf "."; \
 	done
-
-	@echo -n "¡TODO BIEN!\n=================================================================================\n\n"
+	@printf "]\n"
 
 build:
 
@@ -25,18 +22,19 @@ build:
 
 install:
 
-	mkdir -p $(DESTDIR)/usr/share/canaima-escritorio-gnome/
-	cp -r pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
-	mkdir -p $(DESTDIR)/etc/xdg/autostart/
-	cp -r desktop/libcanberra-login-sound.desktop $(DESTDIR)/etc/xdg/autostart/
-	mkdir -p $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
-	cp -r sounds/desktop-login.oga $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
+	@mkdir -p $(DESTDIR)/usr/share/canaima-escritorio-gnome
+	@mkdir -p $(DESTDIR)/usr/share/sounds/freedesktop/stereo
+	@mkdir -p $(DESTDIR)/etc/xdg/autostart
+	@cp pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	@cp config/* $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	@cp libcanberra-login-sound.desktop $(DESTDIR)/etc/xdg/autostart/
+	@cp desktop-login.oga $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
 
 uninstall:
 
-	rm -rf $(DESTDIR)/usr/share/canaima-escritorio-gnome/
-	rm -rf $(DESTDIR)/etc/xdg/autostart/
-	rm -rf $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
+	@rm -rf $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	@rm -rf $(DESTDIR)/etc/xdg/autostart/libcanberra-login-sound.desktop
+	@rm -rf $(DESTDIR)/usr/share/sounds/freedesktop/stereo/desktop-login.oga
 
 clean:
 

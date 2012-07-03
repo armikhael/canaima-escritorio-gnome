@@ -89,12 +89,15 @@ case ${1} in
 
 			# ¿No existe la carpeta Escritorio?
 			if [ ! -d ${HOME_U}/Escritorio ]; then
-				[ -h ${HOME_U}/Escritorio ] && rm -rf ${HOME_U}/Escritorio
-				[ -f ${HOME_U}/Escritorio ] && rm -rf ${HOME_U}/Escritorio
+				if [ -h ${HOME_U}/Escritorio ] || [ -f ${HOME_U}/Escritorio ]; then
+					rm -rf ${HOME_U}/Escritorio
+				fi
+
 				mkdir ${HOME_U}/Escritorio
 				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
 				ADVERTENCIA "Creando carpeta Escritorio en ${HOME_U} ..."
 			fi
+
 			# ¿Existe un enlace simbólico llamado Desktop?
 			# ¿Y una carpeta llamada Escritorio?
 			if [ -h ${HOME_U}/Desktop ] && [ -d ${HOME_U}/Escritorio ]; then
@@ -102,22 +105,26 @@ case ${1} in
 				rm -f ${HOME_U}/Desktop
 				ADVERTENCIA "Removiendo enlace de escritorio Desktop en ${HOME_U} ..."
 			fi
+
 			# ¿Existe un enlace simbólico llamado Escritorio?
 			# ¿Y una carpeta llamada Desktop?
 			if [ -h ${HOME_U}/Escritorio ] && [ -d ${HOME_U}/Desktop ]; then
 				# Borra el enlace simbólico
 				rm -f ${HOME_U}/Escritorio
+
 				# y renombra la carpeta a Escritorio
 				mv ${HOME_U}/Desktop ${HOME_U}/Escritorio
 				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
 				ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en ${HOME_U} ..."
 			fi
+
 			# ¿Existen dos directorios con el mismo propósito?
 			if [ -d ${HOME_U}/Escritorio ] && [ -d ${HOME_U}/Desktop ]; then
 				# Mueve el contenido de Desktop a Escritorio
-			if [ $( ls -lah ${HOME_U}/Desktop | wc  -l ) -gt 0 ]; then
-		    		mv ${HOME_U}/Desktop/* ${HOME_U}/Escritorio/
-			fi
+				if [ $( ls -1 ${HOME_U}/Desktop | wc  -l ) -gt 0 ]; then
+			    		mv ${HOME_U}/Desktop/* ${HOME_U}/Escritorio/
+				fi
+
 				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
 				# Borra la carpeta Desktop
 				rm -rf ${HOME_U}/Desktop
