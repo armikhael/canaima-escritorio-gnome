@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-29) stable; urgency=low
+
+  * [ca645ef] Removiendo archivo innecesario.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 16:07:48 -0430
+
 canaima-escritorio-gnome (3.1-28) stable; urgency=low
 
   * [e05bbba] Agregando force a update-alternatives para forzar la
