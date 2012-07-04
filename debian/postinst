@@ -84,7 +84,7 @@ case ${1} in
 
 				# ¿No existe la carpeta Escritorio?
 				if [ ! -d "/home/${USERNAME}/Escritorio" ]; then
-					if [ -h "/home/${USERNAME}/Escritorio" ]
+					if [ -h "/home/${USERNAME}/Escritorio" ] \
 					|| [ -f "/home/${USERNAME}/Escritorio" ]; then
 						rm -rf "/home/${USERNAME}/Escritorio"
 					fi
