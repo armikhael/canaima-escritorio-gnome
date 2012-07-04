@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.1-28) stable; urgency=low
+
+  * [e05bbba] Agregando force a update-alternatives para forzar la
+    sobreescritura de alternativas.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 15:43:22 -0430
+
 canaima-escritorio-gnome (3.1-27) stable; urgency=low
 
   * [cf5246c] Agregando configuraciones para sysctl, usr-dirs y
