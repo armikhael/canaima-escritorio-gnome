@@ -25,10 +25,15 @@ install:
 	@mkdir -p $(DESTDIR)/usr/share/canaima-escritorio-gnome
 	@mkdir -p $(DESTDIR)/usr/share/sounds/freedesktop/stereo
 	@mkdir -p $(DESTDIR)/etc/xdg/autostart
+	@mkdir -p $(DESTDIR)/etc/skel/.config
+	@mkdir -p $(DESTDIR)/etc/sysctl.d
 	@cp pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
-	@cp config/* $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	@cp alternatives/* $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 	@cp libcanberra-login-sound.desktop $(DESTDIR)/etc/xdg/autostart/
 	@cp desktop-login.oga $(DESTDIR)/usr/share/sounds/freedesktop/stereo/
+	@cp config/canaima-escritorio-gnome.conf $(DESTDIR)/etc/sysctl.d/
+	@cp config/user-dirs.dirs $(DESTDIR)/etc/skel/.config/
+	@cp config/user-dirs.locale $(DESTDIR)/etc/skel/.config/
 
 uninstall:
 

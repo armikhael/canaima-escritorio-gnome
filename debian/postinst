@@ -24,7 +24,7 @@ EXITO() {
 	printf "\033[1;32m${1}\033[0m\n"
 }
 
-ALTERNATIVES="/etc/default/prelink /etc/default/rcS /etc/inittab /etc/xdg/user-dirs.defaults /etc/locale.nopurge"
+ALTERNATIVES="/etc/default/prelink /etc/default/rcS /etc/inittab /etc/xdg/user-dirs.defaults /etc/locale.nopurge /etc/adduser.conf /etc/NetworkManager/NetworkManager.conf"
 
 case ${1} in
 	configure|'')
@@ -75,98 +75,73 @@ case ${1} in
 			ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en /etc/skel/ ..."
 		fi
 
-	# Para cada usuario en /home/ ...
-	for HOME_U in /home/*?; do
-		# Obteniendo sólo el nombre del usuario
-		USUARIO=$( basename ${HOME_U} )
+		# Para cada usuario en /home/ ...
+		for USERNAME in $( ls -1 "/home/" ); do
+			# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+			if [ $( grep -c "${USERNAME}:.*:.*:.*:.*:.*:::" /etc/shadow ) -eq 1 ] \
+			&& [ $( grep -c "${USERNAME}:.*:.*:.*:.*:.*:/bin/.*sh" /etc/passwd ) -eq 1 ] \
+			&& [ -d "/home/${USERNAME}/.config" ]; then
 
-		# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
-		if [ $( grep -c "${HOME_U}:.*:.*:.*:.*:.*:::" /etc/shadow ) -eq 1 ] \
-		&& [ $( grep -c "${HOME_U}:.*:.*:.*:.*:.*:/bin/.*sh" /etc/passwd ) -eq 1 ] \
-		&& [ -d ${HOME_U}/.config ] \
-		&& [ -d ${HOME_U} ]; then
+				# ¿No existe la carpeta Escritorio?
+				if [ ! -d "/home/${USERNAME}/Escritorio" ]; then
+					if [ -h "/home/${USERNAME}/Escritorio" ]
+					|| [ -f "/home/${USERNAME}/Escritorio" ]; then
+						rm -rf "/home/${USERNAME}/Escritorio"
+					fi
 
-			# ¿No existe la carpeta Escritorio?
-			if [ ! -d ${HOME_U}/Escritorio ]; then
-				if [ -h ${HOME_U}/Escritorio ] || [ -f ${HOME_U}/Escritorio ]; then
-					rm -rf ${HOME_U}/Escritorio
+					mkdir "/home/${USERNAME}/Escritorio"
+					chown -R ${USERNAME}:${USERNAME} "/home/${USERNAME}/Escritorio"
+					ADVERTENCIA "Creando carpeta Escritorio en /home/${USERNAME} ..."
 				fi
 
-				mkdir ${HOME_U}/Escritorio
-				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
-				ADVERTENCIA "Creando carpeta Escritorio en ${HOME_U} ..."
-			fi
-
-			# ¿Existe un enlace simbólico llamado Desktop?
-			# ¿Y una carpeta llamada Escritorio?
-			if [ -h ${HOME_U}/Desktop ] && [ -d ${HOME_U}/Escritorio ]; then
-				# Borra el enlace simbólico
-				rm -f ${HOME_U}/Desktop
-				ADVERTENCIA "Removiendo enlace de escritorio Desktop en ${HOME_U} ..."
-			fi
-
-			# ¿Existe un enlace simbólico llamado Escritorio?
-			# ¿Y una carpeta llamada Desktop?
-			if [ -h ${HOME_U}/Escritorio ] && [ -d ${HOME_U}/Desktop ]; then
-				# Borra el enlace simbólico
-				rm -f ${HOME_U}/Escritorio
-
-				# y renombra la carpeta a Escritorio
-				mv ${HOME_U}/Desktop ${HOME_U}/Escritorio
-				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
-				ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en ${HOME_U} ..."
-			fi
-
-			# ¿Existen dos directorios con el mismo propósito?
-			if [ -d ${HOME_U}/Escritorio ] && [ -d ${HOME_U}/Desktop ]; then
-				# Mueve el contenido de Desktop a Escritorio
-				if [ $( ls -1 ${HOME_U}/Desktop | wc  -l ) -gt 0 ]; then
-			    		mv ${HOME_U}/Desktop/* ${HOME_U}/Escritorio/
+				# ¿Existe un enlace simbólico llamado Desktop?
+				# ¿Y una carpeta llamada Escritorio?
+				if [ -h "/home/${USERNAME}/Desktop" ] && [ -d "/home/${USERNAME}/Escritorio" ]; then
+					# Borra el enlace simbólico
+					rm -f "/home/${USERNAME}/Desktop"
+					ADVERTENCIA "Removiendo enlace de escritorio Desktop en /home/${USERNAME} ..."
 				fi
 
-				chown -R ${HOME_U}:${HOME_U} ${HOME_U}/Escritorio
-				# Borra la carpeta Desktop
-				rm -rf ${HOME_U}/Desktop
-				ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en ${HOME_U} ..."
+				# ¿Existe un enlace simbólico llamado Escritorio?
+				# ¿Y una carpeta llamada Desktop?
+				if [ -h "/home/${USERNAME}/Escritorio" ] && [ -d "/home/${USERNAME}/Desktop" ]; then
+					# Borra el enlace simbólico
+					rm -f "/home/${USERNAME}/Escritorio"
+
+					# y renombra la carpeta a Escritorio
+					mv "/home/${USERNAME}/Desktop" "/home/${USERNAME}/Escritorio"
+					chown -R ${USERNAME}:${USERNAME} "/home/${USERNAME}/Escritorio"
+					ADVERTENCIA "Borrando enlace simbólico Escritorio y renombrando carpeta Desktop a Escritorio en /home/${USERNAME} ..."
+				fi
+
+				# ¿Existen dos directorios con el mismo propósito?
+				if [ -d "/home/${USERNAME}/Escritorio" ] && [ -d "/home/${USERNAME}/Desktop" ]; then
+					# Mueve el contenido de Desktop a Escritorio
+					if [ $( ls -1 "/home/${USERNAME}/Desktop" | wc  -l ) -gt 0 ]; then
+			    			mv "/home/${USERNAME}/Desktop/*" "/home/${USERNAME}/Escritorio/"
+					fi
+
+					chown -R ${USERNAME}:${USERNAME} "/home/${USERNAME}/Escritorio"
+					# Borra la carpeta Desktop
+					rm -rf "/home/${USERNAME}/Desktop"
+					ADVERTENCIA "Moviendo el contenido de la carpeta Desktop a Escritorio y borrando Desktop en /home/${USERNAME} ..."
+				fi
+
+				# Configuremos XDG para que use como locale "es_VE" y
+				# Escritorio como carpeta de usuario predeterminada
+
+				cp "/etc/skel/.config/user-dirs.locale" "/home/${USERNAME}/.config/"
+				cp "/etc/skel/.config/user-dirs.dirs" "/home/${USERNAME}/.config/"
+				chown -R ${USERNAME}:${USERNAME} "/home/${USERNAME}/.config"
+
+				# Actualicemos la configuración
+				if [ -x "$( which xdg-user-dirs-update )" ]; then
+					su ${USERNAME} --command "xdg-user-dirs-update"
+					su ${USERNAME} --command "xdg-user-dirs-update --force"
+					EXITO "Carpetas de usuario actualizadas para '"${USERNAME}"'"
+				fi
 			fi
-
-			# Configuremos XDG para que use como locale "es_VE" y
-			# Escritorio como carpeta de usuario predeterminada
-
-			echo "es_VE" > ${HOME_U}/.config/user-dirs.locale
-
-cat <<EOF >${HOME_U}/.config/user-dirs.dirs
-# This file is written by xdg-user-dirs-update
-# If you want to change or add directories, just edit the line you're
-# interested in. All local changes will be retained on the next run
-# Format is XDG_xxx_DIR="\$HOME/yyy", where yyy is a shell-escaped
-# homedir-relative path, or XDG_xxx_DIR="/yyy", where /yyy is an
-# absolute path. No other format is supported.
-#
-XDG_DESKTOP_DIR="\$HOME/Escritorio"
-XDG_DOWNLOAD_DIR="\$HOME/Descargas"
-XDG_TEMPLATES_DIR="\$HOME/Plantillas"
-XDG_PUBLICSHARE_DIR="\$HOME/Público"
-XDG_DOCUMENTS_DIR="\$HOME/Documentos"
-XDG_MUSIC_DIR="\$HOME/Música"
-XDG_PICTURES_DIR="\$HOME/Imágenes"
-XDG_VIDEOS_DIR="\$HOME/Videos"
-
-EOF
-
-			chown -R ${HOME_U}:${HOME_U} ${HOME_U}/.config
-
-			# Actualicemos la configuración
-			if [ -x "$( which xdg-user-dirs-update )" ]; then
-				su ${HOME_U} --command "xdg-user-dirs-update"
-				su ${HOME_U} --command "xdg-user-dirs-update --force"
-				EXITO "Carpetas de usuario actualizadas para '"${HOME_U}"'"
-			fi
-	
-		fi
-
-	done
-
+		done
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
