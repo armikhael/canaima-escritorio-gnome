@@ -12,8 +12,10 @@ canaima-escritorio-gnome (3.1-25) stable; urgency=low
   * [58adddf] Agregando procedimiento de remoción de alternativas en
     postremove.
   * [2414a2b] Corrigiendo mantenedor.
+  * [9f3ba5e] Corrigiendo error en rutina de comprobación de scripts de
+    shell.
 
- -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 11:26:31 -0430
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 11:28:52 -0430
 
 canaima-escritorio-gnome (3.1-24) stable; urgency=low
 
