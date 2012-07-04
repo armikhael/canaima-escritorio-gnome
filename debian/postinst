@@ -32,7 +32,7 @@ case ${1} in
 		for ALT in ${ALTERNATIVES}; do
 			ALTNAME="$( basename "${ALT}" )"
 			ADVERTENCIA "Añadiendo alternativa para el archivo \"${ALT}\" ..."
-			update-alternatives --install "${ALT}" "${ALTNAME}" "/usr/share/canaima-escritorio-gnome/${ALTNAME}" 60
+			update-alternatives --force --install "${ALT}" "${ALTNAME}" "/usr/share/canaima-escritorio-gnome/${ALTNAME}" 60
 		done
 
 		# ¿No existe la carpeta escritorio?
