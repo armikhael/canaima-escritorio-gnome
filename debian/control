@@ -2,7 +2,7 @@ Source: canaima-escritorio-gnome
 Section: gnome
 Priority: optional
 Maintainer: Equipo de Desarrollo de Canaima GNU/Linux <desarrolladores@canaima.softwarelibre.gob.ve>
-Uploaders: Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>
+Uploaders: Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
 Homepage: http://canaima.softwarelibre.gob.ve/
