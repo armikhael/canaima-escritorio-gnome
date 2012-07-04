@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-31) stable; urgency=low
+
+  * [567e697] Agregando Pre-Depends a adduser.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 16:59:22 -0430
+
 canaima-escritorio-gnome (3.1-30) stable; urgency=low
 
   * [7d06b66] Modificando grupos por defecto.
