@@ -1,8 +1,19 @@
 canaima-escritorio-gnome (3.1-25) stable; urgency=low
 
+  [ Sasha Veronica Solano Grosjean ]
   * [7f69b75] eliminado el paquete rar
 
- -- Sasha Veronica Solano Grosjean <sashasolano@gmail.com>  Fri, 11 May 2012 15:32:52 -0430
+  [ Luis Alejandro Martínez Faneyth ]
+  * [553d979] Agregando archivos de configuración para sustituir cambios
+    de postinstall. Cambiando lugar de algunos archivos.
+  * [2a10698] Agregando dependencoas a libgnome2-perl para mejorar la
+    interfaz de instalación 'dialog'. Agregando dependencias a gvfs-fuse
+    para activar la compartición de archivos por samba.
+  * [58adddf] Agregando procedimiento de remoción de alternativas en
+    postremove.
+  * [2414a2b] Corrigiendo mantenedor.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 11:26:31 -0430
 
 canaima-escritorio-gnome (3.1-24) stable; urgency=low
 
