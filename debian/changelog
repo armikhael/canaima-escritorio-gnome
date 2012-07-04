@@ -4,8 +4,10 @@ canaima-escritorio-gnome (3.1-27) stable; urgency=low
     NetWorkManager.
   * [14eff96] Agregando configuraciones para sysctl, usr-dirs y
     NetWorkManager.
+  * [6421726] Agregando configuraciones para sysctl, usr-dirs y
+    NetWorkManager.
 
- -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 15:29:35 -0430
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 15:29:42 -0430
 
 canaima-escritorio-gnome (3.1-26) stable; urgency=low
 
