@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-26) stable; urgency=low
+
+  * [8daed70] Corrigiendo estado de ejecución de un .desktop.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 04 Jul 2012 11:38:30 -0430
+
 canaima-escritorio-gnome (3.1-25) stable; urgency=low
 
   [ Sasha Veronica Solano Grosjean ]
