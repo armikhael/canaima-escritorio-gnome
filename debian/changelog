@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-32) stable; urgency=low
+
+  * [ebe57f1] Corrigiendo detalles en el paquete fuente.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 05 Jul 2012 13:59:18 -0430
+
 canaima-escritorio-gnome (3.1-31) stable; urgency=low
 
   * [567e697] Agregando Pre-Depends a adduser.
