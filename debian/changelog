@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.1-33) stable; urgency=low
+
+  * [d5dd6a0] Mejorando la rutina de incorporación de usuarios a los
+    grupos predeterminados.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 06 Jul 2012 22:16:34 -0430
+
 canaima-escritorio-gnome (3.1-32) stable; urgency=low
 
   * [ebe57f1] Corrigiendo detalles en el paquete fuente.
