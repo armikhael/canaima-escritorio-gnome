@@ -144,7 +144,7 @@ case ${1} in
 
 				for ADD in ${ADDGROUPS}; do
 					for VAL in $( cat /etc/group | awk -F: '{print $1}' ); do
-						if [ "${ADD}" == "${VAL}" ]; then
+						if [ "${ADD}" = "${VAL}" ]; then
 							adduser "${USERNAME}" "${ADD}" || true
 						fi
 					done
