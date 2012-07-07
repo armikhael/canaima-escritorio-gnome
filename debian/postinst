@@ -25,7 +25,7 @@ EXITO() {
 }
 
 ALTERNATIVES="/etc/default/prelink /etc/default/rcS /etc/inittab /etc/xdg/user-dirs.defaults /etc/locale.nopurge /etc/adduser.conf /etc/NetworkManager/NetworkManager.conf"
-GROUPS="lp cdrom floppy audio dip dialout video plugdev netdev bluetooth lpadmin powerdev scanner users fuse"
+ADDGROUPS="lp cdrom floppy audio dip dialout video plugdev netdev bluetooth lpadmin powerdev scanner users fuse"
 
 case ${1} in
 	configure|'')
@@ -137,14 +137,17 @@ case ${1} in
 
 				# Actualicemos la configuración
 				if [ -x "$( which xdg-user-dirs-update )" ]; then
-					su ${USERNAME} --command "xdg-user-dirs-update"
-					su ${USERNAME} --command "xdg-user-dirs-update --force"
+					su ${USERNAME} --command "xdg-user-dirs-update" || true
+					su ${USERNAME} --command "xdg-user-dirs-update --force" || true
 					EXITO "Carpetas de usuario actualizadas para '"${USERNAME}"'"
 				fi
-				
-				# Añadimos el usuario en los grupos predeterminados
-				for GROUP in ${GROUPS}; do
-					adduser "${USERNAME}" "${GROUP}"
+
+				for ADD in ${ADDGROUPS}; do
+					for VAL in $( cat /etc/group | awk -F: '{print $1}' ); do
+						if [ "${ADD}" == "${VAL}" ]; then
+							adduser "${USERNAME}" "${ADD}" || true
+						fi
+					done
 				done
 			fi
 		done
