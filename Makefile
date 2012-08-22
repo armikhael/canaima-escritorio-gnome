@@ -2,7 +2,7 @@
 
 SHELL := sh -e
 
-SCRIPTS = debian/postinst debian/prerm
+SCRIPTS = debian/postinst debian/postrm
 
 all: build
 
