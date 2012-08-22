@@ -9,8 +9,9 @@ canaima-escritorio-gnome (3.1-33) stable; urgency=low
     con ucf/ucfr.
   * [9401611] Asegurando que existen los archivos antes de actualizarlos
     con ucf/ucfr.
+  * [4fcbd59] Arreglando configuración con ucf.
 
- -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 22 Aug 2012 15:45:52 -0430
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 22 Aug 2012 17:39:15 -0430
 
 canaima-escritorio-gnome (3.1-32) stable; urgency=low
 
