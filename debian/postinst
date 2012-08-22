@@ -29,17 +29,11 @@ ADDGROUPS="lp cdrom floppy audio dip dialout video plugdev netdev bluetooth lpad
 
 case ${1} in
 	configure|'')
-
 		for ALT in ${ALTERNATIVES}; do
 			ALTNAME="$( basename "${ALT}" )"
 
-			if [ ! -e "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}" ]; then
-				mkdir -p "/etc/canaima-escritorio-gnome/alternatives/"
-				touch "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}"
-			fi
-
 			if which ucf >/dev/null; then
-				ucf --debconf-ok "/usr/share/canaima-escritorio-gnome/alternatives/${ALTNAME}" "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}"
+				ucf "/usr/share/canaima-escritorio-gnome/alternatives/${ALTNAME}" "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}"
 			fi
 
 			if which ucfr >/dev/null; then
