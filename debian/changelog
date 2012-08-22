@@ -7,8 +7,10 @@ canaima-escritorio-gnome (3.1-33) stable; urgency=low
     con ucf/ucfr.
   * [151c04b] Moviendo alternativas a /etc y gestionando actualizaciones
     con ucf/ucfr.
+  * [9401611] Asegurando que existen los archivos antes de actualizarlos
+    con ucf/ucfr.
 
- -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 22 Aug 2012 15:19:12 -0430
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 22 Aug 2012 15:45:52 -0430
 
 canaima-escritorio-gnome (3.1-32) stable; urgency=low
 
