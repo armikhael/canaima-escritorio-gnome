@@ -32,6 +32,12 @@ case ${1} in
 
 		for ALT in ${ALTERNATIVES}; do
 			ALTNAME="$( basename "${ALT}" )"
+
+			if [ ! -e "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}" ]; then
+				mkdir -p "/etc/canaima-escritorio-gnome/alternatives/"
+				touch "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}"
+			fi
+
 			if which ucf >/dev/null; then
 				ucf --debconf-ok "/usr/share/canaima-escritorio-gnome/alternatives/${ALTNAME}" "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}"
 			fi
