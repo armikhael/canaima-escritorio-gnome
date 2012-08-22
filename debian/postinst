@@ -32,8 +32,16 @@ case ${1} in
 
 		for ALT in ${ALTERNATIVES}; do
 			ALTNAME="$( basename "${ALT}" )"
+			if which ucf >/dev/null; then
+				ucf --debconf-ok "/usr/share/canaima-escritorio-gnome/alternatives/${ALTNAME}" "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}"
+			fi
+
+			if which ucfr >/dev/null; then
+				ucfr canaima-escritorio-gnome "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}"
+			fi
+
 			ADVERTENCIA "Añadiendo alternativa para el archivo \"${ALT}\" ..."
-			update-alternatives --force --install "${ALT}" "${ALTNAME}" "/usr/share/canaima-escritorio-gnome/${ALTNAME}" 60
+			update-alternatives --force --install "${ALT}" "${ALTNAME}" "/etc/canaima-escritorio-gnome/alternatives/${ALTNAME}" 60
 		done
 
 		# ¿No existe la carpeta escritorio?
