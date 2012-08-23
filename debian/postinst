@@ -25,6 +25,7 @@ EXITO() {
 }
 
 ALTERNATIVES="/etc/default/prelink /etc/default/rcS /etc/inittab /etc/xdg/user-dirs.defaults /etc/locale.nopurge /etc/adduser.conf /etc/NetworkManager/NetworkManager.conf"
+
 ADDGROUPS="lp cdrom floppy audio dip dialout video plugdev netdev bluetooth lpadmin powerdev scanner users fuse"
 
 case ${1} in
