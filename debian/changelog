@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (3.1-35) stable; urgency=low
+
+  * [e6a01ec] Generando la carpeta /etc/canaima-escritorio-
+    gnome/alternatives dentro del paquete.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Mon, 27 Aug 2012 13:27:23 -0430
+
 canaima-escritorio-gnome (3.1-34) stable; urgency=low
 
   * [b6795fd] Bump.
