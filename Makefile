@@ -27,6 +27,7 @@ install:
 	@mkdir -p $(DESTDIR)/etc/xdg/autostart
 	@mkdir -p $(DESTDIR)/etc/skel/.config
 	@mkdir -p $(DESTDIR)/etc/sysctl.d
+	@mkdir -p $(DESTDIR)/etc/canaima-escritorio-gnome/alternatives
 	@cp pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 	@cp -r alternatives $(DESTDIR)/usr/share/canaima-escritorio-gnome/
 	@cp libcanberra-login-sound.desktop $(DESTDIR)/etc/xdg/autostart/
