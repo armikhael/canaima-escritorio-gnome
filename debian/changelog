@@ -7,8 +7,10 @@ canaima-escritorio-gnome (3.1-35) stable; urgency=low
   [ Francisco Javier Vásquez Guerrero ]
   * [c273d15] preconfiguraciones para inicio de aplicaciones ficheros
     mimeinfo.cache nuevo archivos en capeta alternatives
+  * [49ba652] preconfiguraciones para inicio de aplicaciones ficheros
+    mimeinfo.cache nuevo archivos en capeta alternatives
 
- -- Francisco Javier Vásquez Guerrero <franjvasquezg@gmail.com>  Fri, 26 Oct 2012 14:25:44 -0430
+ -- Francisco Javier Vásquez Guerrero <franjvasquezg@gmail.com>  Fri, 26 Oct 2012 14:28:13 -0430
 
 canaima-escritorio-gnome (3.1-34) stable; urgency=low
 
