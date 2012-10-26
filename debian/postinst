@@ -24,7 +24,7 @@ EXITO() {
 	printf "\033[1;32m${1}\033[0m\n"
 }
 
-ALTERNATIVES="/etc/default/prelink /etc/default/rcS /etc/inittab /etc/xdg/user-dirs.defaults /etc/locale.nopurge /etc/adduser.conf /etc/NetworkManager/NetworkManager.conf"
+ALTERNATIVES="/etc/default/prelink /etc/default/rcS /etc/inittab /etc/xdg/user-dirs.defaults /etc/locale.nopurge /etc/adduser.conf /etc/NetworkManager/NetworkManager.conf /usr/share/applications/mimeinfo.cache"
 
 ADDGROUPS="lp cdrom floppy audio dip dialout video plugdev netdev bluetooth lpadmin powerdev scanner users fuse"
 
