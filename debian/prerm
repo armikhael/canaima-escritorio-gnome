@@ -24,7 +24,7 @@ EXITO() {
         printf "\033[1;32m${1}\033[0m\n"
 }
 
-ALTERNATIVES="/etc/apt/sources.list /etc/default/locale /etc/locale.gen /etc/default/keyboard"
+ALTERNATIVES="/etc/default/prelink /etc/default/rcS /etc/inittab /etc/xdg/user-dirs.defaults /etc/locale.nopurge /etc/adduser.conf /etc/NetworkManager/NetworkManager.conf /usr/share/applications/defaults.list"
 
 case ${1} in
 	remove|upgrade|deconfigure)
