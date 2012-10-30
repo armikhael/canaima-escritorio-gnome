@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (3.1-36) stable; urgency=low
+
+  * [cdb97ab] Corrigiendo detalle en el Makefile.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Tue, 30 Oct 2012 15:35:23 -0430
+
 canaima-escritorio-gnome (3.1-35) stable; urgency=low
 
   [ Luis Alejandro Martínez Faneyth ]
