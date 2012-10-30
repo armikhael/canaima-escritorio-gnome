@@ -10,7 +10,12 @@ canaima-escritorio-gnome (3.1-35) stable; urgency=low
   * [49ba652] preconfiguraciones para inicio de aplicaciones ficheros
     mimeinfo.cache nuevo archivos en capeta alternatives
 
- -- Francisco Javier Vásquez Guerrero <franjvasquezg@gmail.com>  Fri, 26 Oct 2012 14:28:13 -0430
+  [ Luis Alejandro Martínez Faneyth ]
+  * [60be568] Agregando alternativa a
+    /usr/share/applications/defaults.list y agregando zona horaria para
+    America/Caracas.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Tue, 30 Oct 2012 15:32:59 -0430
 
 canaima-escritorio-gnome (3.1-34) stable; urgency=low
 
