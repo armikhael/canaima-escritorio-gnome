@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (4.0) stable; urgency=low
+
+  * [2a0ae68] Removiendo archivos de configuración. Removiendo rutinas de update-alternatives de postinstalación, preinstalación, etc. Removiendo sonido de inicio. Actualizando lista de dependencias y estándares. Actualizando huevo de pascua. Cambiando a formato nativo.
+  * UNRELEASED
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Mon, 22 Apr 2013 15:09:38 -0430
+
 canaima-escritorio-gnome (3.1-36) stable; urgency=low
 
   * [cdb97ab] Corrigiendo detalle en el Makefile.
