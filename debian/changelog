@@ -1,10 +1,14 @@
-canaima-escritorio-gnome (4.0) stable; urgency=low
+canaima-escritorio-gnome (4.0) unstable; urgency=low
 
+  [ Luis Alejandro Martínez Faneyth ]
   * [2a0ae68] Removiendo archivos de configuración. Removiendo rutinas de update-alternatives de postinstalación, preinstalación, etc. Removiendo sonido de inicio. Actualizando lista de dependencias y estándares. Actualizando huevo de pascua. Cambiando a formato nativo.
-  * [f2f06b5] Agregando formato de compresión "xz".
+  * [f2f06b5] Agregando formato de compresión "xz". Corrigiendo sintaxis de dependencias.
   * [6884b91] Corrigiendo sintaxis de dependencias.
 
- -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Mon, 22 Apr 2013 15:09:38 -0430
+  [ Erick Birbe ]
+  * [25d71eb] Eliminando opción de compresión en xz
+
+ -- Erick Birbe <erickcion@gmail.com>  Tue, 23 Apr 2013 16:20:16 -0430
 
 canaima-escritorio-gnome (3.1-36) stable; urgency=low
 
