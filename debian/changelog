@@ -1,3 +1,13 @@
+canaima-escritorio-gnome (4.0+1) unstable; urgency=low
+
+  [ Erick Birbe ]
+  * [25d71eb] Eliminando opción de compresión en xz
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [df13f05] Ajustando las dependencias para la primera versión alpha de Canaima 4.0.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 03 May 2013 15:25:36 -0430
+
 canaima-escritorio-gnome (4.0) unstable; urgency=low
 
   [ Luis Alejandro Martínez Faneyth ]
