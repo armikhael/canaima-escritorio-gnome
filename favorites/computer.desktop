@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Equipo
+Icon=computer
+Comment=Abre una ventana mostrando todos los dispositivos disponibles.
+Exec=nautilus --new-window computer://
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Utility;Core;
+StartupNotify=False

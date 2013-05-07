@@ -15,7 +15,9 @@ build:
 install:
 
 	@mkdir -p $(DESTDIR)/usr/share/canaima-escritorio-gnome
-	@cp -r pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome/
+	@mkdir -p $(DESTDIR)/usr/share/applications
+	@cp -r favorites/*.desktop $(DESTDIR)/usr/share/applications
+	@cp -r pascua.jpg $(DESTDIR)/usr/share/canaima-escritorio-gnome
 
 uninstall:
 
