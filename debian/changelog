@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (4.0+4) unstable; urgency=low
+
+  * [8989950] Activando sonido de inicio para la sesión Gnome.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 10 May 2013 16:02:06 -0430
+
 canaima-escritorio-gnome (4.0+3) unstable; urgency=low
 
   * [6bc4864] Agregando dependencia a apt-xapian-index porque es necesario para el funcionamiento de software-center. Arreglando comandos de lanzamiento de nautilos para los .desktop favoritos. Agregando software-center a la lista de favoritos.
