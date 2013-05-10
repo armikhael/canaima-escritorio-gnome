@@ -1,5 +1,6 @@
 canaima-escritorio-gnome (4.0+4) unstable; urgency=low
 
+  * [e7935bc] Corrigiendo estilo.
   * [8989950] Activando sonido de inicio para la sesión Gnome.
 
  -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 10 May 2013 16:02:06 -0430
