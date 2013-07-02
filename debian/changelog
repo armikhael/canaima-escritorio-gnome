@@ -1,3 +1,13 @@
+canaima-escritorio-gnome (4.0+6) unstable; urgency=low
+
+  * [01892f4] Ordenando dependencias de forma alfabetica
+  * [8829449] Agregando canaima-l10n como dependencia.
+    Con esta dependencia el sistema sera capaz de resolver si hacen
+    falta paquetes adicionales de idioma e instalarlos.
+  * [3d0164b] Corrigiendo error de coma
+
+ -- Erick Birbe <erickcion@gmail.com>  Tue, 02 Jul 2013 13:23:26 -0430
+
 canaima-escritorio-gnome (4.0+5) unstable; urgency=low
 
   * [1ba2a31] Agregando dependencia a jockey-gtk.
