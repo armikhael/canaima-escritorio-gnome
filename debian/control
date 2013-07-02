@@ -100,11 +100,11 @@ Depends:alacarte (>= 0.13.4),
 		${shlibs:Depends},
 		${misc:Depends}
 Recommends:	amigu (>= 0.7.2),
-			canaima-accesibilidad-minimo (>= 4.0)
+			canaima-accesibilidad-minimo (>= 4.0),
 			canaima-multimedia-gnome (>= 4.0),
 			canaima-notas-gnome (>= 4.0),
 			canaima-ofimatica-gnome (>= 4.0),
-			canaima-web-gnome (>= 4.0),
+			canaima-web-gnome (>= 4.0)
 Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
  Este paquete provee los archivos basicos para el funcionamiento
  de un sistema GNOME de Canaima GNU/Linux.
