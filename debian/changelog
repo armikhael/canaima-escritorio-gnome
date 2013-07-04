@@ -1,3 +1,14 @@
+canaima-escritorio-gnome (4.0+7) unstable; urgency=low
+
+  [ Francisco Javier Vásquez Guerrero ]
+  * [790c87c] removemos los paquetes {alacarte nautilus-sendto-empathy nautilus-image-converter 
+                                      fonts-cantarell gnome-packagekit  gnome-nettool vino vinagre 
+                                      gnome-contacts gnome-system-log gnome-dictionary gnome-user-guide 
+                                      gdebi gnome-tweak-tools}, 
+              para achicar la imagen ISO, ademas incluimos paquetes faltantes
+
+ -- francisco vasquez <franj@franj.cnti.gob.ve>  Thu, 04 Jul 2013 11:38:09 -0430
+
 canaima-escritorio-gnome (4.0+6) unstable; urgency=low
 
   * [01892f4] Ordenando dependencias de forma alfabetica
