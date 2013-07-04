@@ -10,7 +10,8 @@ Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome/tre
 
 Package: canaima-escritorio-gnome
 Architecture: all
-Depends:apt-xapian-index,
+Depends:	alacarte (>= 3.5.3),
+		apt-xapian-index,
 		avahi-daemon,
 		baobab (>= 3.4),
 		bash-completion,
@@ -48,6 +49,7 @@ Depends:apt-xapian-index,
 		gnome-sushi (>= 0.4),
 		gnome-system-monitor (>= 3.4),
 		gnome-terminal (>= 3.4),
+		gnome-tweak-tool (>= 3.4),
 		gnome-user-share (>= 3.0),
 		gsettings-desktop-schemas (>= 3.4), 
 		gtk2-engines (>= 2.20.2),
