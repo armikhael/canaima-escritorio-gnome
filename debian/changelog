@@ -1,3 +1,12 @@
+canaima-escritorio-gnome (4.0+8) unstable; urgency=low
+
+  [ Francisco Javier Vásquez Guerrero ]
+  * [f239221] reconsideramos incorporar los paquetes alacarte y gnome-tweak-tool 
+              en reunión de equipo de desarrollo, falta por incorporar el paquete 
+              gnome-user-guide
+
+ -- francisco vasquez  <franjvasquezg@gmail.com>  Thu, 04 Jul 2013 17:24:20 -0430
+
 canaima-escritorio-gnome (4.0+7) unstable; urgency=low
 
   [ Francisco Javier Vásquez Guerrero ]
@@ -7,7 +16,7 @@ canaima-escritorio-gnome (4.0+7) unstable; urgency=low
                                       gdebi gnome-tweak-tools}, 
               para achicar la imagen ISO, ademas incluimos paquetes faltantes
 
- -- francisco vasquez <franj@franj.cnti.gob.ve>  Thu, 04 Jul 2013 11:38:09 -0430
+ -- francisco vasquez <franjvasquezg@gmail.com>  Thu, 04 Jul 2013 11:38:09 -0430
 
 canaima-escritorio-gnome (4.0+6) unstable; urgency=low
 
