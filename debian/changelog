@@ -1,3 +1,10 @@
+canaima-escritorio-gnome (4.0+9) unstable; urgency=low
+
+  [ Francisco Javier Vásquez guerrero ]
+  * [0f50e38] incorporando canaima escritorio gnome y lanzador nuevo de software-center
+
+ -- francisco vasquez  <franjvasquezg@gmail.com>  Wed, 17 Jul 2013 21:26:59 -0430
+
 canaima-escritorio-gnome (4.0+8) unstable; urgency=low
 
   [ Francisco Javier Vásquez Guerrero ]
