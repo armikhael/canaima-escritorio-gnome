@@ -1,2 +1,2 @@
 [org.gnome.shell]
-favorite-apps=['computer.desktop', 'home.desktop', 'cunaguaro.desktop', 'turpial.desktop', 'software-center.desktop', 'libreoffice-writer.desktop', 'rhythmbox.desktop', 'trash.desktop']
+favorite-apps=['computer.desktop', 'home.desktop', 'cunaguaro.desktop', 'turpial.desktop', 'unbranded-software-center.desktop', 'libreoffice-writer.desktop', 'rhythmbox.desktop', 'trash.desktop']
