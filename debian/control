@@ -3,7 +3,7 @@ Section: gnome
 Priority: optional
 Maintainer: Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.3
+Standards-Version: 3.9.4
 Homepage: http://canaima.softwarelibre.gob.ve/
 Vcs-Git: git://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome.git
 Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-escritorio-gnome/trees/master
@@ -15,7 +15,6 @@ Depends:	alacarte (>= 3.5.3),
 		avahi-daemon,
 		baobab (>= 3.4),
 		bash-completion,
-		canaima-escritorio-gnome (>= 4.0),
 		canaima-escritorio-base (>= 4.0),
 		canaima-estilo-visual-gnome (>= 4.0),
 		canaima-l10n,
@@ -95,10 +94,12 @@ Depends:	alacarte (>= 3.5.3),
 		${misc:Depends}
 Recommends:	amigu (>= 0.7.2),
 			canaima-accesibilidad-minimo (>= 4.0),
+			canaima-bienvenido-gnome (>= 4.0),
 			canaima-multimedia-gnome (>= 4.0),
 			canaima-notas-gnome (>= 4.0),
 			canaima-ofimatica-gnome (>= 4.0),
-			canaima-web-gnome (>= 4.0)
+			canaima-web-gnome (>= 4.0),
+			canaima-fondos-dinamicos (>= 2.1+2)
 Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
  Este paquete provee los archivos basicos para el funcionamiento
  de un sistema GNOME de Canaima GNU/Linux.
