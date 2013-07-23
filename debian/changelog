@@ -1,8 +1,11 @@
 canaima-escritorio-gnome (4.0+10) unstable; urgency=low
 
-  * UNRELEASED
+  [ Francisco Javier Vásquez Guerrero ]
+  * [27fa747] agragamos canaima-bienvenido-gnome
 
- -- francisco vasquez <franj@franj.cnti.gob.ve>  Tue, 23 Jul 2013 17:16:38 -0430
+  [ francisco vasquez ]
+
+ -- francisco vasquez <franjvasquezg@gmail.com>  Tue, 23 Jul 2013 17:17:25 -0430
 
 canaima-escritorio-gnome (4.0+9) unstable; urgency=low
 
