@@ -83,6 +83,7 @@ Depends:	alacarte (>= 3.5.3),
 		unace,
 		unrar,
 		unzip,
+		update-manager-gnome,
 		usbutils,
 		usb-modeswitch,
 		xdg-user-dirs-gtk,
@@ -103,4 +104,4 @@ Recommends:	amigu (>= 0.7.2),
 			canaima-fondos-dinamicos (>= 2.1+2)
 Description: Metapaquete que agrupa los componentes del escritorio gnome para Canaima
  Este paquete provee los archivos basicos para el funcionamiento
- de un sistema GNOME de Canaima GNU/Linux.
+ de un s-istema GNOME de Canaima GNU/Linux.
