@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (4.0+14) unstable; urgency=low
+
+  * [e40dce9] Agregando dependencia gnome-search-tool al archivo control
+
+ -- Carlos Espinoza <carlosarmikhael@gmail.com>  Wed, 04 Sep 2013 16:33:45 -0430
+
 canaima-escritorio-gnome (4.0+13) unstable; urgency=low
 
   * [1391713] Removiendo dependencia de synaptic del archivo control
