@@ -91,6 +91,7 @@ Depends:	alacarte (>= 3.5.3),
 		yelp (>= 3.4),
 		zenity (>= 3.4),
 		zip,
+		gnome-search-tool,
 		${shlibs:Depends},
 		${misc:Depends}
 Recommends:	amigu (>= 0.7.2),
