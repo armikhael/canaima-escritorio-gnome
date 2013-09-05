@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (4.0+15) unstable; urgency=low
+
+  * [c7c61a4] Agregando dependencia de tracker-miner-fs Removiendo dependencia de gnome-search-tool
+
+ -- Carlos Espinoza <carlosarmikhael@gmail.com>  Thu, 05 Sep 2013 14:01:48 -0430
+
 canaima-escritorio-gnome (4.0+14) unstable; urgency=low
 
   * [e40dce9] Agregando dependencia gnome-search-tool al archivo control
