@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (4.0+16) unstable; urgency=low
+
+  * [3a5ab9e] Agregando dependencia de update-notifier al archivo control
+
+ -- Carlos Espinoza <carlosarmikhael@gmail.com>  Mon, 16 Sep 2013 13:48:09 -0430
+
 canaima-escritorio-gnome (4.0+15) unstable; urgency=low
 
   * [c7c61a4] Agregando dependencia de tracker-miner-fs Removiendo dependencia de gnome-search-tool
