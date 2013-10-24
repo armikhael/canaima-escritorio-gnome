@@ -1,3 +1,9 @@
+canaima-escritorio-gnome (4.0+17) unstable; urgency=low
+
+  * [233b1e9] Agregando soporte para Touchpad
+
+ -- Carlos Espinoza <carlosarmikhael@gmail.com>  Thu, 24 Oct 2013 16:34:31 -0430
+
 canaima-escritorio-gnome (4.0+16) unstable; urgency=low
 
   * [3a5ab9e] Agregando dependencia de update-notifier al archivo control
