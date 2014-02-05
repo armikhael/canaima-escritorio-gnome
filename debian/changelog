@@ -1,3 +1,11 @@
+canaima-escritorio-gnome (4.0+18) unstable; urgency=low
+
+  [ Francisco Javier Vásquez guerrero ]
+  * [86bad33] resolviendo ticket #275
+  * [c7511c2] versión exacta del paquete para 4.0
+
+ -- Francisco Javier Vásquez Guerrero <franjvasquezg@gmail.com>  Wed, 05 Feb 2014 18:14:20 -0430
+
 canaima-escritorio-gnome (4.0+17) unstable; urgency=low
 
   * [233b1e9] Agregando soporte para Touchpad
